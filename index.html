@@ -88,9 +88,15 @@
           <i class="fa-solid fa-brain text-lg"></i>
         </div>
         <div>
-          <span class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-indigo-800 tracking-tight">Synapse</span>
-          <span class="text-xs font-semibold px-2 py-0.5 ml-1.5 rounded-full bg-brand-50 text-brand-600 border border-brand-200">AI 智慧大腦</span>
-          <p class="text-[11px] text-slate-500 hidden sm:block">持續自組織知識庫 & 人生工作成長顧問</p>
+          <div class="flex items-center gap-1.5">
+            <span class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-indigo-800 tracking-tight">Synapse</span>
+            <!-- Live API connection indicator badge -->
+            <span id="header-status-badge" class="text-[11px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 bg-slate-100 text-slate-500 border border-slate-200">
+              <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+              <span>檢測中</span>
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-500 hidden sm:block">多媒體知識庫・精準網頁與影音提取・智慧人生顧問</p>
         </div>
       </div>
 
@@ -112,7 +118,7 @@
         </div>
 
         <!-- Quick Capture CTA -->
-        <button onclick="openModal('addModal')" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white rounded-xl font-medium text-sm shadow-sm shadow-brand-600/30 transition-all active:scale-95">
+        <button onclick="openModal('addModal')" class="flex items-center gap-2 px-3.5 sm:px-4 py-2 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white rounded-xl font-medium text-xs sm:text-sm shadow-sm shadow-brand-600/30 transition-all active:scale-95 shrink-0">
           <i class="fa-solid fa-plus text-xs"></i>
           <span>收集新內容</span>
         </button>
@@ -120,29 +126,29 @@
         <!-- Settings & API Key Configuration -->
         <button onclick="openSettingsModal()" title="設定 Gemini API Key 與資料備份" class="p-2 text-slate-500 hover:text-slate-800 rounded-xl hover:bg-slate-100 border border-slate-200 transition relative">
           <i class="fa-solid fa-gear"></i>
-          <span id="api-key-badge" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white"></span>
+          <span id="api-key-badge" class="hidden absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full border-2 border-white animate-pulse"></span>
         </button>
 
         <!-- Toggle Mobile Panels -->
-        <button onclick="toggleMobilePanel('leftSidebar')" class="lg:hidden p-2 text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-100">
+        <button onclick="toggleMobilePanel('leftSidebar')" class="lg:hidden p-2 text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-100" title="導航分類">
           <i class="fa-solid fa-bars-staggered"></i>
         </button>
-        <button onclick="toggleMobilePanel('rightSidebar')" class="xl:hidden p-2 text-indigo-600 hover:text-indigo-800 rounded-lg hover:bg-indigo-50">
+        <button onclick="toggleMobilePanel('rightSidebar')" class="xl:hidden p-2 text-indigo-600 hover:text-indigo-800 rounded-lg hover:bg-indigo-50" title="人生教練">
           <i class="fa-solid fa-wand-magic-sparkles"></i>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- API KEY MISSING BANNER (If not set) -->
+  <!-- API KEY MISSING BANNER -->
   <div id="missing-api-banner" class="hidden bg-amber-500 text-white text-xs px-4 py-2.5 shadow-xs">
     <div class="max-w-[1700px] mx-auto flex items-center justify-between gap-3">
       <div class="flex items-center gap-2">
         <i class="fa-solid fa-triangle-exclamation text-sm"></i>
-        <span><strong>尚未設定 Gemini API Key</strong>：目前處於離線備存模式。設定專屬免費 Key 即可讓 AI 自動抓取網頁標題、濃縮摘要與提煉重點！</span>
+        <span><strong>尚未設定 Gemini API Key</strong>：目前處於離線備存模式。設定專屬免費 Key 即可讓 AI 自動精準解析新聞、YouTube 與各類文章！</span>
       </div>
       <button onclick="openSettingsModal()" class="shrink-0 bg-white text-amber-900 font-bold px-3 py-1 rounded-lg text-xs hover:bg-amber-100 transition shadow-xs">
-        立即填入 Key ➔
+        填入 Key ➔
       </button>
     </div>
   </div>
@@ -181,16 +187,22 @@
 
       <!-- Content Media Types -->
       <div class="mb-6">
-        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-2 px-1">內容載體</span>
+        <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-2 px-1">內容與影音載體</span>
         <div class="grid grid-cols-2 gap-1.5 text-xs">
           <button onclick="setMediaFilter('article')" class="media-btn flex items-center gap-2 px-2.5 py-2 rounded-lg border border-slate-200 text-slate-600 hover:border-brand-500 hover:text-brand-600 transition" data-media="article">
-            <i class="fa-regular fa-newspaper text-indigo-500"></i> 文章筆記
+            <i class="fa-regular fa-newspaper text-indigo-500"></i> 新聞專文
           </button>
-          <button onclick="setMediaFilter('video')" class="media-btn flex items-center gap-2 px-2.5 py-2 rounded-lg border border-slate-200 text-slate-600 hover:border-brand-500 hover:text-brand-600 transition" data-media="video">
-            <i class="fa-brands fa-youtube text-red-500"></i> 影片影音
+          <button onclick="setMediaFilter('youtube')" class="media-btn flex items-center gap-2 px-2.5 py-2 rounded-lg border border-slate-200 text-slate-600 hover:border-red-500 hover:text-red-600 transition" data-media="youtube">
+            <i class="fa-brands fa-youtube text-red-600 text-sm"></i> YouTube 影片
+          </button>
+          <button onclick="setMediaFilter('shorts')" class="media-btn flex items-center gap-2 px-2.5 py-2 rounded-lg border border-slate-200 text-slate-600 hover:border-red-500 hover:text-red-600 transition" data-media="shorts">
+            <i class="fa-solid fa-play text-red-500 text-xs"></i> YT Shorts
+          </button>
+          <button onclick="setMediaFilter('instagram')" class="media-btn flex items-center gap-2 px-2.5 py-2 rounded-lg border border-slate-200 text-slate-600 hover:border-pink-500 hover:text-pink-600 transition" data-media="instagram">
+            <i class="fa-brands fa-instagram text-pink-600 text-sm"></i> IG / Reels
           </button>
           <button onclick="setMediaFilter('link')" class="media-btn flex items-center gap-2 px-2.5 py-2 rounded-lg border border-slate-200 text-slate-600 hover:border-brand-500 hover:text-brand-600 transition" data-media="link">
-            <i class="fa-solid fa-globe text-blue-500"></i> 外部連結
+            <i class="fa-solid fa-globe text-blue-500"></i> 網頁連結
           </button>
           <button onclick="setMediaFilter('note')" class="media-btn flex items-center gap-2 px-2.5 py-2 rounded-lg border border-slate-200 text-slate-600 hover:border-brand-500 hover:text-brand-600 transition" data-media="note">
             <i class="fa-solid fa-lightbulb text-amber-500"></i> 隨手靈感
@@ -228,14 +240,21 @@
           <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
             <i class="fa-solid fa-bolt-lightning"></i>
           </div>
-          <input id="quick-input" type="text" placeholder="直接貼上網址、新聞、文章或隨手筆記..." 
-            class="w-full bg-transparent border-0 text-sm focus:outline-none placeholder:text-slate-400"
+          <input id="quick-input" type="text" placeholder="貼上新聞文章、YouTube、Shorts、IG 連結或輸入想法..." 
+            class="w-full bg-transparent border-0 text-xs sm:text-sm focus:outline-none placeholder:text-slate-400"
             onkeydown="if(event.key === 'Enter') handleQuickIngest()"
           />
-          <button onclick="handleQuickIngest()" id="quick-submit-btn" class="shrink-0 px-4 py-2 bg-slate-900 hover:bg-brand-600 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm">
+          <button onclick="handleQuickIngest()" id="quick-submit-btn" class="shrink-0 px-3.5 sm:px-4 py-2 bg-slate-900 hover:bg-brand-600 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm">
             <span>AI 解析</span>
             <i class="fa-solid fa-arrow-right text-[10px]"></i>
           </button>
+        </div>
+        <div class="flex items-center gap-2 mt-2 pt-2 border-t border-slate-100 text-[11px] text-slate-400 flex-wrap">
+          <span class="text-slate-500 font-medium">支援格式：</span>
+          <span class="inline-flex items-center gap-1 text-indigo-600"><i class="fa-regular fa-newspaper"></i> 聯合報/各大新聞</span>
+          <span class="inline-flex items-center gap-1 text-red-600"><i class="fa-brands fa-youtube"></i> YouTube 影片</span>
+          <span class="inline-flex items-center gap-1 text-red-500"><i class="fa-solid fa-play"></i> Shorts</span>
+          <span class="inline-flex items-center gap-1 text-pink-600"><i class="fa-brands fa-instagram"></i> IG Reels/貼文</span>
         </div>
       </div>
 
@@ -271,16 +290,16 @@
       <!-- Ingestion Loading Progress Banner -->
       <div id="ai-processing-card" class="hidden bg-gradient-to-r from-brand-600/10 via-purple-600/10 to-indigo-600/10 border border-brand-500/30 rounded-2xl p-4 transition-all">
         <div class="flex items-center gap-3">
-          <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center animate-spin">
+          <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center animate-spin shrink-0">
             <i class="fa-solid fa-circle-notch text-sm"></i>
           </div>
-          <div class="flex-1">
-            <h4 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
-              <span>Gemini AI 正在深度研讀與萃取中...</span>
-              <span class="animate-subtle text-brand-600 font-normal">提取摘要、分類標籤、精華重點</span>
+          <div class="flex-1 min-w-0">
+            <h4 class="text-xs font-bold text-slate-800 flex items-center gap-1.5 truncate">
+              <span id="ai-processing-title">正在連線穿透擷取文章正文...</span>
             </h4>
+            <p id="ai-processing-sub" class="animate-subtle text-brand-600 text-[11px] truncate mt-0.5">取得真實新聞標題與段落中...</p>
             <div class="w-full bg-slate-200/80 rounded-full h-1.5 mt-2 overflow-hidden">
-              <div class="bg-gradient-to-r from-brand-500 to-purple-500 h-1.5 rounded-full w-2/3 animate-pulse"></div>
+              <div class="bg-gradient-to-r from-brand-500 via-pink-500 to-purple-500 h-1.5 rounded-full w-2/3 animate-pulse"></div>
             </div>
           </div>
         </div>
@@ -295,7 +314,7 @@
           <i class="fa-regular fa-folder-open"></i>
         </div>
         <h3 class="text-sm font-bold text-slate-700 mb-1">找不到相符的筆記內容</h3>
-        <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">試著切換不同分類或搜尋關鍵字，或者貼上任何連結立即讓 AI 萃取收納。</p>
+        <p class="text-xs text-slate-500 max-w-sm mx-auto mb-4">貼上任何新聞網址、YouTube 或筆記立即收錄！</p>
         <button onclick="resetFilters()" class="text-xs px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition">
           顯示全部內容
         </button>
@@ -331,10 +350,10 @@
             </span>
             大腦累積度：<span id="advisor-level" class="text-indigo-600">LV.3 跨界連結期</span>
           </span>
-          <span id="advisor-item-count" class="text-[10px] text-indigo-700 bg-white/80 px-1.5 py-0.5 rounded font-semibold border border-indigo-200/50">已整合 5 份知識</span>
+          <span id="advisor-item-count" class="text-[10px] text-indigo-700 bg-white/80 px-1.5 py-0.5 rounded font-semibold border border-indigo-200/50">已整合知識</span>
         </div>
         <p class="text-[11px] text-indigo-800/80 leading-relaxed" id="advisor-brief">
-          正在從你的工作效率、AI科技與哲學隨筆中抽絲剝繭，為你提煉可執行的思考心法。
+          正在從你的新聞閱讀、行銷商業與思維筆記中抽絲剝繭，提煉可實踐的成長藍圖。
         </p>
       </div>
 
@@ -348,8 +367,7 @@
             <span>🎯 工作實踐與效能推進</span>
           </div>
           <div id="work-advice-body" class="text-xs text-slate-600 leading-relaxed space-y-2">
-            <p>💡 <strong class="text-slate-800">聚焦重要槓桿：</strong>結合您收錄的筆記，將例行任務交由工作流範式自動化，將時間集中在高價值的決策架構上。</p>
-            <p>⚡ <strong class="text-slate-800">立即行動點：</strong>為近期的三個主要目標設定明確的「非死線限制」，減少認知切換損耗。</p>
+            <p>💡 <strong class="text-slate-800">創新品牌聯想：</strong>將商業命名與幽默記憶點融入專案設計，創造直擊人心的記憶槓桿。</p>
           </div>
         </div>
 
@@ -360,7 +378,7 @@
             <span>🌱 人生哲學與心智修煉</span>
           </div>
           <div id="life-advice-body" class="text-xs text-slate-600 leading-relaxed space-y-2">
-            <p>🧘 <strong class="text-slate-800">內在沉澱：</strong>知識的價值在於轉化而非單純囤積。給自己預留固定的「白紙思考時間」，讓不同領域的概念碰撞產生洞察。</p>
+            <p>🧘 <strong class="text-slate-800">保持好奇童心：</strong>從看似荒謬的歷史趣談中，提煉出打破常規思考的勇氣。</p>
           </div>
         </div>
 
@@ -371,7 +389,7 @@
             <span>🧩 跨領域思維連結</span>
           </div>
           <div id="cross-advice-body" class="text-xs text-slate-600 leading-relaxed">
-            <p>目前不同分類領域已開始出現交集：嘗試用系統論的視角來重新檢視自己的生活習慣設計。</p>
+            <p>運動行銷與傳統民生用品的結合，證明商業世界永遠需要跨界想像力。</p>
           </div>
         </div>
 
@@ -404,7 +422,10 @@
           <div class="w-8 h-8 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
             <i class="fa-solid fa-plus text-sm"></i>
           </div>
-          <h3 class="text-base font-bold text-slate-800">收納新知識到大腦</h3>
+          <div>
+            <h3 class="text-base font-bold text-slate-800">收納新知識到大腦</h3>
+            <p class="text-[11px] text-slate-500">支援 新聞專文 / YouTube / Shorts / IG Reels</p>
+          </div>
         </div>
         <button onclick="closeModal('addModal')" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg">
           <i class="fa-solid fa-xmark text-lg"></i>
@@ -413,31 +434,36 @@
 
       <form id="add-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">內容來源 (網址連結、文字或標題)</label>
-          <input type="text" id="modal-url-input" placeholder="https://... 或輸入文章主題" required 
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">來源網址或標題</label>
+          <input type="text" id="modal-url-input" placeholder="貼上新聞文章、YouTube、Shorts 或 IG 網址..." required 
             class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition"
           />
         </div>
 
         <div>
-          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">摘錄內容 / 心得筆記 (可選)</label>
-          <textarea id="modal-text-input" rows="4" placeholder="可以直接貼上文章精彩段落、YouTube 影片重點，或個人的隨手想法...（若留空，AI 將自動抓取並提煉）" 
-            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition"></textarea>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider">補充重點 / 心得筆記 (可選)</label>
+            <span class="text-[11px] text-indigo-600 font-medium">💡 網頁文章留空即可自動提取</span>
+          </div>
+          <textarea id="modal-text-input" rows="4" placeholder="・新聞文章與 YouTube：留空即可，AI 會自動穿透抓取正文與逐字稿&#10;・IG 貼文：可直接複製創作者的精彩內文貼在此處" 
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition"></textarea>
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">載體類型</label>
             <select id="modal-type-select" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-brand-500">
-              <option value="auto">✨ AI 自動判斷</option>
-              <option value="article">📄 深度文章</option>
-              <option value="video">🎬 影片影音</option>
+              <option value="auto">✨ AI 自動精確識別</option>
+              <option value="article">📄 新聞深度專文</option>
+              <option value="youtube">🎬 YouTube 影片</option>
+              <option value="shorts">📱 YouTube Shorts</option>
+              <option value="instagram">📸 Instagram Reels/貼文</option>
               <option value="link">🌐 網頁連結</option>
-              <option value="note">💡 個人思考</option>
+              <option value="note">💡 隨手靈感</option>
             </select>
           </div>
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">自訂分類 (若想強制歸類)</label>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">自訂分類 (若想強制指定)</label>
             <input type="text" id="modal-cat-input" placeholder="留空由 AI 自動組織" 
               class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500 focus:bg-white transition"
             />
@@ -463,18 +489,28 @@
       <div class="flex items-start justify-between gap-4 pb-4 border-b border-slate-100">
         <div>
           <div class="flex items-center gap-2 mb-1.5 flex-wrap">
-            <span id="detail-badge-type" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-brand-50 text-brand-600 border border-brand-200">文章</span>
-            <span id="detail-category" class="text-[11px] font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200">工作心智與效率</span>
-            <span id="detail-date" class="text-[11px] text-slate-400">2026-10-17</span>
+            <span id="detail-badge-type" class="text-[11px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1"></span>
+            <span id="detail-category" class="text-[11px] font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200"></span>
+            <span id="detail-date" class="text-[11px] text-slate-400"></span>
           </div>
-          <h2 id="detail-title" class="text-base sm:text-xl font-bold text-slate-800 leading-snug break-all">筆記標題</h2>
+          <h2 id="detail-title" class="text-base sm:text-xl font-bold text-slate-800 leading-snug break-all"></h2>
         </div>
         <button onclick="closeModal('detailModal')" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg shrink-0">
           <i class="fa-solid fa-xmark text-lg"></i>
         </button>
       </div>
 
-      <div class="py-5 space-y-5">
+      <!-- Thumbnail Preview for Videos (if available) -->
+      <div id="detail-thumbnail-container" class="hidden my-4 rounded-2xl overflow-hidden border border-slate-200 bg-slate-900 relative group">
+        <img id="detail-thumbnail-img" src="" alt="Thumbnail" class="w-full max-h-64 object-cover object-center opacity-90 group-hover:opacity-100 transition">
+        <a id="detail-thumbnail-playbtn" href="#" target="_blank" rel="noopener noreferrer" class="absolute inset-0 flex items-center justify-center">
+          <span class="w-12 h-12 rounded-full bg-red-600 text-white flex items-center justify-center shadow-lg transform group-hover:scale-110 transition">
+            <i class="fa-solid fa-play ml-1"></i>
+          </span>
+        </a>
+      </div>
+
+      <div class="py-4 space-y-5">
         <!-- AI Summary Block -->
         <div class="p-4 rounded-2xl bg-gradient-to-r from-indigo-50/70 via-brand-50/50 to-white border border-brand-200/60">
           <div class="flex items-center justify-between mb-2">
@@ -484,7 +520,7 @@
             </h4>
             <!-- Re-analyze button -->
             <button id="detail-reanalyze-btn" class="text-xs text-brand-600 hover:text-brand-800 font-semibold flex items-center gap-1 bg-white px-2.5 py-1 rounded-lg border border-brand-200 shadow-xs hover:shadow-sm transition">
-              <i class="fa-solid fa-rotate text-[11px]"></i> 讓 AI 重新解析此篇
+              <i class="fa-solid fa-rotate text-[11px]"></i> 重新解析此篇
             </button>
           </div>
           <p id="detail-summary" class="text-xs sm:text-sm text-slate-700 leading-relaxed"></p>
@@ -503,7 +539,7 @@
         <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/60">
           <h4 class="text-xs font-bold text-amber-900 flex items-center gap-1.5 mb-1.5">
             <i class="fa-solid fa-lightbulb text-amber-600"></i>
-            這篇知識對我的人生或工作有何啟發？
+            這部影音/文章對我的人生或工作有何啟發？
           </h4>
           <p id="detail-impact" class="text-xs sm:text-sm text-amber-900/80 leading-relaxed"></p>
         </div>
@@ -511,7 +547,7 @@
         <!-- Original Source Link -->
         <div id="detail-source-section">
           <h4 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1.5">來源位址</h4>
-          <a id="detail-source-link" href="#" target="_blank" rel="noopener noreferrer" class="text-xs text-brand-600 hover:underline break-all flex items-center gap-1.5">
+          <a id="detail-source-link" href="#" target="_blank" rel="noopener noreferrer" class="text-xs text-brand-600 hover:underline break-all flex items-center gap-1.5 font-medium">
             <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
             <span id="detail-source-url">https://...</span>
           </a>
@@ -545,7 +581,7 @@
           </div>
           <div>
             <h3 class="text-base font-bold text-slate-800">雲端設定與 API Key</h3>
-            <p class="text-[11px] text-slate-500">啟用 AI 自動閱讀、分類與洞察核心</p>
+            <p class="text-[11px] text-slate-500">啟用 AI 解析新聞網頁、YouTube 與短影音</p>
           </div>
         </div>
         <button onclick="closeModal('settingsModal')" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg">
@@ -562,17 +598,44 @@
               Google Gemini API Key
             </label>
             <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-xs text-brand-600 hover:text-brand-800 font-bold underline flex items-center gap-1">
-              👉 免費取得金鑰 <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+              👉 免費申請金鑰 <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
             </a>
           </div>
-          <p class="text-[11px] text-slate-600 mb-2.5 leading-relaxed">
-            前往 Google AI Studio 登入您的 Google 帳號，點擊 <strong>Create API key</strong>，將複製的金鑰貼在此處即可永久免費使用（不需綁定信用卡）。
-          </p>
-          <div class="relative">
+
+          <div class="relative mb-2">
             <input type="text" id="settings-api-key" placeholder="貼上 AIzaSy 開頭的 API Key..." 
               class="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-xl text-xs font-mono focus:outline-none focus:border-brand-500 shadow-inner"
             />
           </div>
+
+          <!-- Realtime Status & Test Button -->
+          <div class="flex items-center justify-between gap-2 pt-1">
+            <div id="settings-current-key-display" class="text-[11px] text-slate-500 truncate">
+              未檢測到有效金鑰
+            </div>
+            <button type="button" onclick="testApiKeyConnection()" class="px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 text-xs font-semibold rounded-lg shadow-xs transition flex items-center gap-1 shrink-0">
+              <i class="fa-solid fa-satellite-dish text-indigo-600"></i> 立即測試連線
+            </button>
+          </div>
+
+          <!-- Test result container -->
+          <div id="test-key-status" class="hidden mt-2 p-2.5 rounded-lg text-xs leading-relaxed border"></div>
+
+          <!-- Persistence Protection Tips -->
+          <p class="text-[10px] text-slate-500 mt-2.5 leading-relaxed bg-white/70 p-2 rounded-lg border border-indigo-100">
+            💡 <strong>金鑰防護</strong>：已啟用「LocalStorage + Cookie + IndexedDB」三重安全防護。請勿在 Safari「私密瀏覽」下使用以避免被瀏覽器強制清理。
+          </p>
+        </div>
+
+        <!-- Copy Quick Direct Link -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between gap-3">
+          <div class="min-w-0">
+            <span class="text-xs font-bold text-slate-800 block">📱 跨裝置/加到主畫面快捷連結</span>
+            <span class="text-[10px] text-slate-500 block truncate">複製含有您的 Key 的直達專屬網址，換瀏覽器免重打</span>
+          </div>
+          <button onclick="copyAutoConfigLink()" class="shrink-0 px-3 py-1.5 bg-white hover:bg-slate-100 border border-slate-300 text-slate-700 rounded-xl text-xs font-medium transition flex items-center gap-1 shadow-xs">
+            <i class="fa-regular fa-copy text-brand-600"></i> 複製專屬網址
+          </button>
         </div>
 
         <!-- Data Backup & Restore -->
@@ -587,7 +650,17 @@
               <input type="file" id="import-file-input" accept=".json" onchange="importDataFromJson(event)" class="hidden" />
             </label>
           </div>
-          <p class="text-[10px] text-slate-400">所有筆記均安全保存在手機瀏覽器本機中，換裝置時可隨時匯出備份。</p>
+        </div>
+
+        <!-- Clear Demo Data Option -->
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+          <div>
+            <span class="text-xs font-bold text-slate-700 block">清除初始示範筆記</span>
+            <span class="text-[11px] text-slate-400">刪除系統內建的示範卡片，保留乾淨大腦</span>
+          </div>
+          <button onclick="clearDemoItems()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-xs font-semibold border border-rose-200 transition">
+            <i class="fa-regular fa-trash-can mr-1"></i> 清除範例
+          </button>
         </div>
       </div>
 
@@ -608,88 +681,191 @@
   <!-- JAVASCRIPT APPLICATION CORE -->
   <script>
     // Storage Keys
-    const STORAGE_ITEMS_KEY = "synapse_hub_items_v1";
+    const STORAGE_ITEMS_KEY = "synapse_hub_items_v2";
     const STORAGE_KEY_API = "synapse_hub_gemini_api_key";
+    const DB_NAME = "SynapseHubPersistentDB";
+    const STORE_NAME = "app_config";
 
-    function getActiveApiKey() {
-      const customKey = localStorage.getItem(STORAGE_KEY_API);
-      return (customKey && customKey.trim()) ? customKey.trim() : "";
+    let cachedApiKey = "";
+
+    // ----------------------------------------------------
+    // TRIPLE-LAYER PERSISTENT STORAGE
+    // ----------------------------------------------------
+    function initIndexedDB() {
+      return new Promise((resolve) => {
+        if (!window.indexedDB) return resolve(null);
+        try {
+          const req = indexedDB.open(DB_NAME, 1);
+          req.onupgradeneeded = (e) => {
+            const db = e.target.result;
+            if (!db.objectStoreNames.contains(STORE_NAME)) {
+              db.createObjectStore(STORE_NAME);
+            }
+          };
+          req.onsuccess = () => resolve(req.result);
+          req.onerror = () => resolve(null);
+        } catch (e) {
+          resolve(null);
+        }
+      });
     }
 
-    function getGeminiEndpoint() {
-      const key = getActiveApiKey();
-      return `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`;
+    async function setIDB(key, val) {
+      try {
+        const db = await initIndexedDB();
+        if (!db) return;
+        const tx = db.transaction(STORE_NAME, "readwrite");
+        tx.objectStore(STORE_NAME).put(val, key);
+      } catch (e) {}
+    }
+
+    async function getIDB(key) {
+      try {
+        const db = await initIndexedDB();
+        if (!db) return null;
+        return new Promise((resolve) => {
+          const tx = db.transaction(STORE_NAME, "readonly");
+          const req = tx.objectStore(STORE_NAME).get(key);
+          req.onsuccess = () => resolve(req.result || null);
+          req.onerror = () => resolve(null);
+        });
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function setPersistentCookie(name, val, days = 365) {
+      try {
+        const d = new Date();
+        d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+        document.cookie = `${name}=${encodeURIComponent(val)};expires=${d.toUTCString()};path=/;SameSite=Lax`;
+      } catch (e) {}
+    }
+
+    function getPersistentCookie(name) {
+      try {
+        const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+        if (match) return decodeURIComponent(match[2]);
+      } catch (e) {}
+      return "";
+    }
+
+    function extractCleanApiKey(str) {
+      if (!str) return "";
+      const match = str.match(/AIzaSy[A-Za-z0-9_-]{33}/);
+      if (match) return match[0];
+      return str.trim().replace(/["']/g, '');
+    }
+
+    async function resolveApiKeyOnBoot() {
+      // 1. Check URL parameters (?key=AIzaSy...)
+      try {
+        const params = new URLSearchParams(window.location.search);
+        const queryKey = params.get("key");
+        if (queryKey) {
+          const clean = extractCleanApiKey(queryKey);
+          if (clean) {
+            await persistApiKey(clean);
+            const cleanUrl = window.location.origin + window.location.pathname + window.location.hash;
+            window.history.replaceState({}, document.title, cleanUrl);
+            showToast("🔑 已成功從專屬連結自動套用 API Key！", "success");
+            return clean;
+          }
+        }
+      } catch (e) {}
+
+      if (cachedApiKey) return cachedApiKey;
+
+      let key = "";
+      try {
+        key = localStorage.getItem(STORAGE_KEY_API) || "";
+      } catch (e) {}
+
+      if (!key) {
+        key = getPersistentCookie(STORAGE_KEY_API);
+        if (key) {
+          try { localStorage.setItem(STORAGE_KEY_API, key); } catch (e) {}
+        }
+      }
+
+      if (!key) {
+        key = (await getIDB(STORAGE_KEY_API)) || "";
+        if (key) {
+          try { localStorage.setItem(STORAGE_KEY_API, key); } catch (e) {}
+          setPersistentCookie(STORAGE_KEY_API, key);
+        }
+      }
+
+      cachedApiKey = extractCleanApiKey(key);
+      return cachedApiKey;
+    }
+
+    async function persistApiKey(rawKey) {
+      const cleanKey = extractCleanApiKey(rawKey);
+      cachedApiKey = cleanKey;
+
+      if (cleanKey) {
+        try { localStorage.setItem(STORAGE_KEY_API, cleanKey); } catch (e) {}
+        setPersistentCookie(STORAGE_KEY_API, cleanKey, 365);
+        await setIDB(STORAGE_KEY_API, cleanKey);
+      } else {
+        try { localStorage.removeItem(STORAGE_KEY_API); } catch (e) {}
+        setPersistentCookie(STORAGE_KEY_API, "", -1);
+        await setIDB(STORAGE_KEY_API, "");
+      }
+      checkApiKeyStatus();
+    }
+
+    function getActiveApiKey() {
+      return cachedApiKey || "";
     }
 
     function checkApiKeyStatus() {
       const key = getActiveApiKey();
       const badge = document.getElementById("api-key-badge");
       const banner = document.getElementById("missing-api-banner");
+      const headerBadge = document.getElementById("header-status-badge");
+
       if (!key) {
         if (badge) badge.classList.remove("hidden");
         if (banner) banner.classList.remove("hidden");
+        if (headerBadge) {
+          headerBadge.className = "text-[11px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 bg-rose-50 text-rose-600 border border-rose-200";
+          headerBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse"></span><span>未設定 Key</span>`;
+        }
       } else {
         if (badge) badge.classList.add("hidden");
         if (banner) banner.classList.add("hidden");
+        if (headerBadge) {
+          const shortKey = key.slice(-4);
+          headerBadge.className = "text-[11px] font-semibold px-2 py-0.5 rounded-full flex items-center gap-1 bg-emerald-50 text-emerald-700 border border-emerald-200";
+          headerBadge.innerHTML = `<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span><span>AI 已連線 (•••${shortKey})</span>`;
+        }
       }
     }
 
     // Default Initial Data
     const defaultInitialItems = [
       {
-        id: "k-1",
-        title: "大腦的外部化：現代知識工作者的第二大腦 (Building a Second Brain)",
-        url: "https://fortelabs.com/blog/basboverview/",
-        type: "article",
-        category: "工作心智與效率",
-        summary: "核心觀念在於將記憶負擔從生物大腦卸載至數位系統，透過 CODE 框架（Capture, Organize, Distill, Express）完成知識從吸收到輸出的閉環。",
+        id: "k-yt-1",
+        title: "如何建立持續進步的微習慣：原子習慣的核心精華解讀",
+        url: "https://www.youtube.com/watch?v=mNeXuUt4pNs",
+        type: "youtube",
+        category: "個人成長與習慣",
+        summary: "專注於身分認同的轉變，而非單純的目標設定。每天進步 1%，一年後將帶來 37 倍的複利成長。",
         takeaways: [
-          "大腦是用來產生想法的，而不是用來死記想法的。",
-          "組織資料不是以『來源類別』劃分，而是以『當前專案與可執行性』劃分（PARA法）。",
-          "提煉才是掌握知識的關鍵，逐步將長文濃縮至幾句金句。"
+          "提示、渴望、回應、獎賞是所有習慣養成的四大迴路。",
+          "讓好習慣顯而易見、有吸引力、輕而易舉、令人滿足。",
+          "不要中斷兩次：錯過一次是意外，錯過兩次就是新習慣的開始。"
         ],
-        impact: "在日常工作中不再害怕遺漏資訊，隨時能借力過往積累的高質量思考素材快速啟動專案。",
-        tags: ["第二大腦", "知識管理", "效率工具", "心智模型"],
+        impact: "在日常工作中將大型任務拆解為 2 分鐘微行動，克服拖延阻力。",
+        tags: ["原子習慣", "微習慣", "行為設計"],
+        thumbnail: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&auto=format&fit=crop&q=80",
         favorite: true,
-        date: "2026-10-15"
-      },
-      {
-        id: "k-2",
-        title: "大語言模型（LLM）的推理極限與人機協作新典範",
-        url: "https://arxiv.org/abs/reasoning-paradigms",
-        type: "link",
-        category: "人工智慧與未來",
-        summary: "探討 AI 從單純的機率文字補全演進至具備系統二思考的推演助手，未來核心競爭力在於人類提出精準問題與批判性評估的能力。",
-        takeaways: [
-          "Prompt Engineering 正在轉變為 Agent 協作架構的設計思維。",
-          "AI 能迅速消除知識門檻，但跨領域直覺與價值觀選擇仍依賴人類。",
-          "個人工作者將成為小型超級個體（Super Individual），擁有整座專家團隊的效能。"
-        ],
-        impact: "工作上應把 AI 當作隨時在線的對偶思維教練，而不是單純的搜尋引擎。",
-        tags: ["AI", "人工智慧", "人機協作", "科技趨勢"],
-        favorite: true,
-        date: "2026-10-16"
-      },
-      {
-        id: "k-3",
-        title: "沉思錄：在不確定的世界中維持內心秩序與專注",
-        url: "https://standardebooks.org/ebooks/marcus-aurelius/meditations",
-        type: "note",
-        category: "心理與人生哲學",
-        summary: "斯多葛哲學的核心原則：區分『你可以控制的』與『你無法控制的』，將全部注意力傾注在內在態度與當下的當務之急，平息外界紛擾。",
-        takeaways: [
-          "外界事態無法直接傷害你的心智，造成困擾的是你對事情的詮釋。",
-          "專注當下的職責，如同每一件事都是人生的最後一件事般全力以赴。",
-          "接受生命的流動與無常，把每一個障礙轉化為前進的道路。"
-        ],
-        impact: "在快節奏的高壓專案中保持平和心境，不再把精力浪費在焦慮無法改變的外部條件上。",
-        tags: ["斯多葛", "心態哲學", "情緒管理", "內在平靜"],
-        favorite: false,
-        date: "2026-10-14"
+        date: "2026-10-17"
       }
     ];
 
-    // State Initialization
     let knowledgeItems = [];
     try {
       const stored = localStorage.getItem(STORAGE_ITEMS_KEY);
@@ -760,7 +936,6 @@
       });
       catListEl.innerHTML = html || `<p class="text-xs text-slate-500 p-2 text-center">暫無分類</p>`;
 
-      // Tags cloud
       const tagStats = getTagsStats();
       const tagCloudEl = document.getElementById("tag-cloud");
       const sortedTags = Object.keys(tagStats).sort((a, b) => tagStats[b] - tagStats[a]).slice(0, 15);
@@ -780,7 +955,6 @@
       });
       tagCloudEl.innerHTML = tagHtml || `<span class="text-xs text-slate-500">暫無標籤</span>`;
 
-      // Counters
       document.getElementById("metric-total-items").innerText = knowledgeItems.length;
       document.getElementById("metric-total-cats").innerText = Object.keys(catStats).length;
       document.getElementById("badge-all-count").innerText = knowledgeItems.length;
@@ -830,8 +1004,7 @@
 
       let html = "";
       items.forEach(item => {
-        const typeIcon = getTypeIcon(item.type);
-        const typeName = getTypeName(item.type);
+        const typeBadge = getTypeBadge(item.type);
 
         const takeawaysPreview = (item.takeaways || []).slice(0, 2).map(t => `
           <li class="flex items-start gap-1.5 text-xs text-slate-600">
@@ -848,14 +1021,22 @@
 
         const isFallback = (item.takeaways && item.takeaways[0] && item.takeaways[0].includes("離線備援"));
 
+        const thumbnailHtml = item.thumbnail ? `
+          <div class="relative w-full h-36 sm:h-44 rounded-xl overflow-hidden mb-3 bg-slate-900 group/thumb">
+            <img src="${escapeHtml(item.thumbnail)}" alt="Thumbnail" class="w-full h-full object-cover opacity-90 group-hover/thumb:opacity-100 transition">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-2.5">
+              <span class="text-[11px] text-white/90 font-medium flex items-center gap-1.5">
+                <i class="fa-solid fa-play text-red-500"></i> 點擊播放 / 查閱詳情
+              </span>
+            </div>
+          </div>
+        ` : '';
+
         html += `
           <div onclick="openItemDetail('${item.id}')" class="group bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-brand-300 p-5 transition-all duration-200 cursor-pointer">
             <div class="flex items-center justify-between gap-2 mb-2.5">
               <div class="flex items-center gap-2 flex-wrap">
-                <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 flex items-center gap-1.5 border border-slate-200">
-                  ${typeIcon}
-                  <span>${typeName}</span>
-                </span>
+                ${typeBadge}
                 <span onclick="event.stopPropagation(); setCategoryFilter('${escapeHtml(item.category)}')" class="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 transition">
                   <i class="fa-solid fa-folder text-[10px] mr-1"></i>${escapeHtml(item.category)}
                 </span>
@@ -871,6 +1052,8 @@
                 </button>
               </div>
             </div>
+
+            ${thumbnailHtml}
 
             <!-- Title -->
             <h3 class="text-base font-bold text-slate-800 group-hover:text-brand-600 transition leading-snug mb-2 break-all">
@@ -907,26 +1090,224 @@
       feedEl.innerHTML = html;
     }
 
-    // Core Ingestion logic with API key validation
+    // ----------------------------------------------------
+    // BULLETPROOF MULTI-PROXY WEBPAGE CONTENT EXTRACTOR
+    // ----------------------------------------------------
+
+    // HTML Metadata & Paragraph Parser
+    function parseHtmlMetadata(htmlString) {
+      if (!htmlString || typeof htmlString !== 'string') return null;
+      try {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(htmlString, "text/html");
+
+        // 1. Precise Title Extraction (og:title > twitter:title > title)
+        let rawTitle = doc.querySelector('meta[property="og:title"]')?.getAttribute('content')
+                    || doc.querySelector('meta[name="twitter:title"]')?.getAttribute('content')
+                    || doc.querySelector('meta[name="title"]')?.getAttribute('content')
+                    || doc.querySelector('title')?.textContent
+                    || "";
+        
+        let cleanTitle = rawTitle.trim();
+        // Remove common media website suffixes
+        cleanTitle = cleanTitle.replace(/\s*[-|_|–|—]\s*(聯合新聞網|報時光|聯合報|udn|Yahoo奇摩|ETtoday|商業周刊|天下雜誌|遠見雜誌).*$/i, '').trim();
+
+        // 2. Description
+        let rawDesc = doc.querySelector('meta[property="og:description"]')?.getAttribute('content')
+                   || doc.querySelector('meta[name="description"]')?.getAttribute('content')
+                   || doc.querySelector('meta[name="twitter:description"]')?.getAttribute('content')
+                   || "";
+
+        // 3. Main Article Text Extraction
+        let bodyText = "";
+        const articleEl = doc.querySelector('article') || doc.querySelector('.story-body') || doc.querySelector('.article-content') || doc.querySelector('main');
+        if (articleEl) {
+          const ps = articleEl.querySelectorAll('p');
+          bodyText = Array.from(ps).map(p => p.textContent.trim()).filter(t => t.length > 15).join('\n');
+        }
+
+        if (!bodyText || bodyText.length < 50) {
+          const allPs = doc.querySelectorAll('p');
+          bodyText = Array.from(allPs).map(p => p.textContent.trim()).filter(t => t.length > 20).slice(0, 20).join('\n');
+        }
+
+        if (cleanTitle || rawDesc || bodyText) {
+          return {
+            title: cleanTitle,
+            description: rawDesc.trim(),
+            content: bodyText.trim().slice(0, 3500)
+          };
+        }
+      } catch (e) {
+        console.warn("HTML Parser error:", e);
+      }
+      return null;
+    }
+
+    // Multi-Proxy Scraper with fallbacks
+    async function fetchWebpageContent(url) {
+      if (!url || !url.startsWith("http")) return null;
+
+      // 1. Try allorigins JSON proxy (Fastest & most reliable for Taiwanese news sites)
+      try {
+        const controller = new AbortController();
+        const tid = setTimeout(() => controller.abort(), 7000);
+        const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`, {
+          signal: controller.signal
+        });
+        clearTimeout(tid);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.contents) {
+            const parsed = parseHtmlMetadata(data.contents);
+            if (parsed && (parsed.title || parsed.content)) {
+              return parsed;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("allorigins failed, trying fallback:", e);
+      }
+
+      // 2. Try Jina Reader
+      try {
+        const controller = new AbortController();
+        const tid = setTimeout(() => controller.abort(), 8500);
+        const res = await fetch(`https://r.jina.ai/${url}`, {
+          signal: controller.signal,
+          headers: { 'Accept': 'text/plain' }
+        });
+        clearTimeout(tid);
+        if (res.ok) {
+          const text = await res.text();
+          if (text && text.length > 80 && !text.includes("Log in to see photos and videos")) {
+            const lines = text.split('\n').filter(l => l.trim().length > 0);
+            let title = "";
+            const titleLine = lines.find(l => l.startsWith('# '));
+            if (titleLine) {
+              title = titleLine.replace('# ', '').trim();
+            }
+            return {
+              title: title,
+              description: "",
+              content: text.slice(0, 3500)
+            };
+          }
+        }
+      } catch (e) {
+        console.warn("Jina reader fallback failed:", e);
+      }
+
+      // 3. Try codetabs proxy
+      try {
+        const controller = new AbortController();
+        const tid = setTimeout(() => controller.abort(), 6500);
+        const res = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`, {
+          signal: controller.signal
+        });
+        clearTimeout(tid);
+        if (res.ok) {
+          const html = await res.text();
+          if (html) {
+            const parsed = parseHtmlMetadata(html);
+            if (parsed && (parsed.title || parsed.content)) {
+              return parsed;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("codetabs proxy fallback failed:", e);
+      }
+
+      return null;
+    }
+
+    // Extract YouTube Video ID
+    function extractYouTubeVideoId(url) {
+      if (!url) return null;
+      const reg = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/|youtube\.com\/shorts\/)([^"&?\/\s]{11})/i;
+      const match = url.match(reg);
+      return match ? match[1] : null;
+    }
+
+    function isInstagramUrl(url) {
+      if (!url) return false;
+      return /(?:instagram\.com\/(p|reel|tv)\/)/i.test(url);
+    }
+
+    // Fetch official YouTube metadata
+    async function fetchYouTubeMetadata(videoId, originalUrl) {
+      const isShort = originalUrl.includes("/shorts/");
+      const result = {
+        title: "",
+        author: "",
+        thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+        isShort: isShort
+      };
+
+      try {
+        const oembedUrl = `https://noembed.com/embed?url=https://www.youtube.com/watch?v=${videoId}`;
+        const res = await fetch(oembedUrl);
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.title) {
+            result.title = data.title;
+            result.author = data.author_name || "";
+          }
+        }
+      } catch (e) {
+        console.warn("YouTube oEmbed fetch fallback", e);
+      }
+      return result;
+    }
+
+    function updateProcessingStatus(title, sub) {
+      const titleEl = document.getElementById("ai-processing-title");
+      const subEl = document.getElementById("ai-processing-sub");
+      if (titleEl && title) titleEl.innerText = title;
+      if (subEl && sub) subEl.innerText = sub;
+    }
+
+    // ----------------------------------------------------
+    // AI INGESTION CORE
+    // ----------------------------------------------------
     async function ingestWithGemini(rawInput, userNotes = "", forcedType = "auto", forcedCat = "", targetItemId = null) {
       const apiKey = getActiveApiKey();
       
-      // If user hasn't setup an API key, notify and save as fallback
+      let inputUrl = "";
+      let inputNotes = userNotes || "";
+      const urlMatch = rawInput.match(/https?:\/\/[^\s]+/i);
+      
+      if (urlMatch) {
+        inputUrl = urlMatch[0];
+        const remainingText = rawInput.replace(inputUrl, "").trim();
+        if (remainingText && !inputNotes) {
+          inputNotes = remainingText;
+        }
+      } else {
+        inputUrl = rawInput.trim();
+      }
+
+      const isUrl = inputUrl.startsWith("http://") || inputUrl.startsWith("https://");
+
       if (!apiKey) {
-        showToast("尚未設定 API Key！已為您備存網址，請點右上角 ⚙️ 填入 Key", "error");
+        showToast("尚未設定 API Key！已為您備存，請點右上角 ⚙️ 填入 Key", "error");
         openSettingsModal();
 
         if (!targetItemId) {
+          const ytId = extractYouTubeVideoId(inputUrl);
+          const fallbackType = ytId ? (inputUrl.includes("/shorts/") ? "shorts" : "youtube") : (isInstagramUrl(inputUrl) ? "instagram" : (isUrl ? "article" : "note"));
           const fallbackItem = {
             id: "k-" + Date.now(),
-            title: rawInput.slice(0, 60) || "手動收錄內容",
-            url: rawInput.startsWith("http") ? rawInput : "",
-            type: forcedType !== "auto" ? forcedType : (rawInput.startsWith("http") ? "link" : "note"),
+            title: isUrl ? inputUrl.slice(0, 60) : "隨手筆記",
+            url: isUrl ? inputUrl : "",
+            type: forcedType !== "auto" ? forcedType : fallbackType,
             category: forcedCat || "隨手筆記",
-            summary: userNotes || rawInput,
+            summary: inputNotes || inputUrl,
             takeaways: ["此內容已由離線備援加入資料庫。設定 API Key 後點「重新解析」即可讓 AI 分析！"],
             impact: "持續回顧並融入日常實踐。",
             tags: ["快速收納"],
+            thumbnail: ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : "",
             favorite: false,
             date: new Date().toISOString().split("T")[0]
           };
@@ -939,32 +1320,84 @@
       }
 
       showProcessingBanner(true);
+      
+      const ytId = extractYouTubeVideoId(inputUrl);
+      const isIg = isInstagramUrl(inputUrl);
+      let detectedType = isUrl ? "article" : "note";
+      let fetchedTitle = "";
+      let fetchedContent = "";
+      let mediaThumbnail = "";
+
+      if (ytId) {
+        detectedType = inputUrl.includes("/shorts/") ? "shorts" : "youtube";
+        updateProcessingStatus("正在提取 YouTube 官方影片資訊與縮圖...", "獲取影片標題、頻道作者與內容精華");
+        const ytMeta = await fetchYouTubeMetadata(ytId, inputUrl);
+        if (ytMeta.title) fetchedTitle = ytMeta.title;
+        if (ytMeta.thumbnail) mediaThumbnail = ytMeta.thumbnail;
+        
+        const webData = await fetchWebpageContent(`https://www.youtube.com/watch?v=${ytId}`);
+        if (webData && webData.content) fetchedContent = webData.content;
+      } else if (isIg) {
+        detectedType = "instagram";
+        updateProcessingStatus("正在萃取 Instagram Reels / 貼文重點...", "解析社群影音的核心論點與金句");
+        const webData = await fetchWebpageContent(inputUrl);
+        if (webData) {
+          if (webData.title) fetchedTitle = webData.title;
+          if (webData.content) fetchedContent = webData.content;
+        }
+      } else if (isUrl) {
+        detectedType = "article";
+        updateProcessingStatus("正在穿透擷取新聞網頁正文...", "連線來源網站讀取真實標題與新聞段落");
+        const webData = await fetchWebpageContent(inputUrl);
+        if (webData) {
+          if (webData.title) fetchedTitle = webData.title;
+          if (webData.content || webData.description) {
+            fetchedContent = (webData.description ? `【重點大綱】：${webData.description}\n` : '') + (webData.content || '');
+          }
+          if (fetchedTitle) {
+            updateProcessingStatus(`已成功讀取：《${fetchedTitle.slice(0, 18)}...》`, "Gemini AI 正在深度研讀與分類提煉中...");
+          }
+        }
+      } else {
+        detectedType = "note";
+        updateProcessingStatus("Gemini AI 正在深入剖析個人隨筆與靈感...", "歸納概念結構與人生建議");
+      }
+
+      // Extract numeric ID from URL to prevent search hallucination
+      const articleIdMatch = inputUrl.match(/\/(\d{6,10})(?:\/|\.|\?|$)/);
+      const articleId = articleIdMatch ? articleIdMatch[1] : "";
 
       const existingCategories = Object.keys(getCategoriesStats());
       const prompt = `
-你是一位頂級的個人知識工程師與思想教練。請分析使用者提供的內容（網址、標題、文章節錄或思考隨筆），萃取其核心精華，輸出繁體中文 JSON：
+你是一位頂級的個人知識工程師與思想教練。請分析以下使用者提供的影音、短片、貼文或文章內容，精確提煉出核心重點。
 
-【使用者提供的輸入】：
-內容或連結：${rawInput}
-補充筆記或心得：${userNotes || "（無額外說明）"}
+【內容來源資料】：
+來源網址：${inputUrl || "（純文字隨筆）"}
+媒體類型識別：${detectedType}
+${fetchedTitle ? `【真實抓取標題】：${fetchedTitle}\n` : ''}
+${fetchedContent ? `【真實抓取內文 / 摘要】：\n${fetchedContent}\n` : ''}
+使用者補充備註：${inputNotes || "（無額外補充）"}
 指定類型偏好：${forcedType}
 指定分類偏好：${forcedCat || "（請自行歸納合適的分類）"}
+${articleId ? `網址文章識別編號：${articleId}\n` : ''}
 
-目前已有分類：${JSON.stringify(existingCategories)}
+目前已有分類庫：${JSON.stringify(existingCategories)}
 
-請遵循以下規範回傳純 JSON 格式：
-1. title: 請依據內容或網址主旨提煉一個精準、洗練且吸引人的繁體中文標題（不要直接把整個超長網址當標題）。
-2. type: "article" | "video" | "link" | "note"（網址通常為 link，文章為 article，影片為 video）。
-3. category: 核心所屬分類名稱（例如："新聞與時事"、"工作心智與效率"、"商業思維與投資"、"人工智慧與未來"、"生活風格與健康"）。若符合現有分類請優先復用。
+【重要規範（嚴格遵守）】：
+1. 標題 (title)：
+   - 若已有【真實抓取標題】，請依據真實標題精煉為吸引人的繁體中文標題。
+   - 絕對禁止胡亂猜測或把同網站上的其他無關新聞（例如教育、教師問題、政治等）冒充為本篇內容！必須嚴格針對此篇真實主題進行萃取。
+2. type: "${forcedType !== 'auto' ? forcedType : detectedType}"
+3. category: 核心分類名稱（例如："商業思維與行銷"、"工作心智與效率"、"運動與生活風格"、"個人成長與習慣"、"科技與未來"、"心理與人生哲學" 等）。若符合現有分類請優先復用。
 4. summary: 2~3 句清晰流暢的核心重點摘要。
-5. takeaways: 3 條具體、實操性強的精華重點清單（繁體中文陣列）。
-6. impact: 1 句精闢指引，點出這篇知識對個人「工作」或「人生思維」能帶來何種啟發或借鏡。
-7. tags: 3~4 個關鍵標籤陣列。
+5. takeaways: 2~3 條具體、實操性強的精華重點清單（繁體中文陣列）。
+6. impact: 1 句精闢指引，點出這篇內容對個人的「工作行動」或「人生思維」能帶來何種啟發。
+7. tags: 3~4 個關鍵標籤陣列（如："#中職"、"#品牌行銷"、"#商業策略"）。
 
-格式要求（嚴格遵守 JSON）：
+格式要求（嚴格遵守純 JSON）：
 {
   "title": "string",
-  "type": "article|video|link|note",
+  "type": "${forcedType !== 'auto' ? forcedType : detectedType}",
   "category": "string",
   "summary": "string",
   "takeaways": ["重點1", "重點2", "重點3"],
@@ -974,23 +1407,37 @@
 `;
 
       try {
+        const useSearchGrounding = isUrl && !fetchedContent && !fetchedTitle;
         const payload = {
           contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            responseMimeType: "application/json"
-          }
+          ...(useSearchGrounding ? { tools: [{ "googleSearch": {} }] } : {}),
+          ...((!useSearchGrounding) ? { generationConfig: { responseMimeType: "application/json" } } : {})
         };
 
-        // Call Gemini Endpoint
-        const response = await fetchWithRetry(getGeminiEndpoint(), {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
+        const models = ["gemini-2.5-flash", "gemini-1.5-flash"];
+        let response = null;
+        let responseErrorMsg = "";
 
-        if (!response.ok) {
-          const errData = await response.json().catch(() => ({}));
-          throw new Error(errData?.error?.message || `HTTP ${response.status}`);
+        for (const model of models) {
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+          try {
+            response = await fetchWithRetry(endpoint, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            if (response.ok) break;
+            else {
+              const err = await response.json().catch(() => ({}));
+              responseErrorMsg = err?.error?.message || `HTTP ${response.status}`;
+            }
+          } catch (e) {
+            responseErrorMsg = e.message;
+          }
+        }
+
+        if (!response || !response.ok) {
+          throw new Error(responseErrorMsg || "連線至 Google Gemini API 失敗");
         }
 
         const data = await response.json();
@@ -1004,26 +1451,32 @@
         } catch (e) {
           const jsonMatch = responseText.match(/\{[\s\S]*\}/);
           if (jsonMatch) parsed = JSON.parse(jsonMatch[0]);
-          else throw new Error("無法解析 JSON");
+          else throw new Error("無法解析 JSON 格式");
         }
+
+        const finalType = forcedType !== "auto" ? forcedType : (parsed.type || detectedType);
 
         const resolvedItem = {
           id: targetItemId || ("k-" + Date.now()),
-          title: parsed.title || rawInput.slice(0, 50),
-          url: rawInput.startsWith("http") ? rawInput : "",
-          type: forcedType !== "auto" ? forcedType : (parsed.type || "link"),
-          category: forcedCat ? forcedCat : (parsed.category || "知識思維"),
-          summary: parsed.summary || rawInput,
+          title: parsed.title || fetchedTitle || inputUrl.slice(0, 50),
+          url: isUrl ? inputUrl : "",
+          type: finalType,
+          category: forcedCat ? forcedCat : (parsed.category || "隨手筆記"),
+          summary: parsed.summary || inputNotes || inputUrl,
           takeaways: (parsed.takeaways && parsed.takeaways.length) ? parsed.takeaways : ["核心觀念已記錄於庫存中。"],
-          impact: parsed.impact || "在工作中實踐並檢視成效。",
-          tags: (parsed.tags && parsed.tags.length) ? parsed.tags : ["未標記"],
+          impact: parsed.impact || "在生活中實踐並檢視成效。",
+          tags: (parsed.tags && parsed.tags.length) ? parsed.tags : [finalType],
+          thumbnail: mediaThumbnail || "",
           favorite: false,
           date: new Date().toISOString().split("T")[0]
         };
 
         if (targetItemId) {
           const idx = knowledgeItems.findIndex(i => i.id === targetItemId);
-          if (idx !== -1) knowledgeItems[idx] = resolvedItem;
+          if (idx !== -1) {
+            resolvedItem.favorite = knowledgeItems[idx].favorite;
+            knowledgeItems[idx] = resolvedItem;
+          }
         } else {
           knowledgeItems.unshift(resolvedItem);
         }
@@ -1031,7 +1484,7 @@
         persistKnowledge();
         renderSidebarTaxonomy();
         renderKnowledgeFeed();
-        showToast("🎉 AI 已成功為您深度解讀並分類！", "success");
+        showToast(`🎉 已成功收錄：《${resolvedItem.title.slice(0, 18)}...》`, "success");
 
         if (targetItemId) openItemDetail(targetItemId);
 
@@ -1044,14 +1497,15 @@
         if (!targetItemId) {
           const fallbackItem = {
             id: "k-" + Date.now(),
-            title: rawInput.slice(0, 50) || "收錄內容",
-            url: rawInput.startsWith("http") ? rawInput : "",
-            type: rawInput.startsWith("http") ? "link" : "note",
+            title: fetchedTitle || (isUrl ? inputUrl.slice(0, 50) : "隨手筆記"),
+            url: isUrl ? inputUrl : "",
+            type: forcedType !== "auto" ? forcedType : detectedType,
             category: forcedCat || "隨手筆記",
-            summary: userNotes || rawInput,
+            summary: inputNotes || inputUrl,
             takeaways: ["此內容已由離線備援加入資料庫。稍後可點擊重新解析。"],
             impact: "持續回顧並融入日常實踐。",
             tags: ["快速收納"],
+            thumbnail: mediaThumbnail || "",
             favorite: false,
             date: new Date().toISOString().split("T")[0]
           };
@@ -1065,6 +1519,15 @@
       }
     }
 
+    function clearDemoItems() {
+      knowledgeItems = knowledgeItems.filter(i => !["k-yt-1", "k-ig-1", "k-yt-2", "k-1", "k-2", "k-3"].includes(i.id));
+      persistKnowledge();
+      renderSidebarTaxonomy();
+      renderKnowledgeFeed();
+      closeModal("settingsModal");
+      showToast("已成功清除所有預設示範卡片！", "success");
+    }
+
     // AI Advisor
     async function generateGrowthInsights(showNotification = false) {
       const apiKey = getActiveApiKey();
@@ -1074,17 +1537,17 @@
       if (refreshBtn) refreshBtn.classList.add("animate-spin");
 
       const knowledgeDigest = knowledgeItems.slice(0, 10).map((it, idx) => 
-        `[${idx+1}] 標題: ${it.title} | 分類: ${it.category} | 重點: ${(it.takeaways||[]).join("; ")} | 對工作人生影響: ${it.impact || ""}`
+        `[${idx+1}] 標題: ${it.title} | 類型: ${it.type} | 分類: ${it.category} | 重點: ${(it.takeaways||[]).join("; ")} | 對工作人生影響: ${it.impact || ""}`
       ).join("\n");
 
       const prompt = `
 你是一位結合了查理·蒙格的多元思維、斯多葛學派心性以及矽谷頂級高管教練智慧的「個人終身成長顧問」。
-使用者目前的個人智慧資料庫累積了以下收錄內容：
+使用者目前的個人智慧資料庫累積了以下收錄內容（包含文章、影音短片與隨筆）：
 ---
 ${knowledgeDigest}
 ---
 
-請綜觀以上使用者近期的閱讀軌跡與心智模型，撰寫一份專屬的「工作與人生進化建議」，回傳純 JSON：
+請綜觀以上使用者近期的閱讀與思考軌跡，撰寫一份專屬的「工作與人生進化建議」，回傳純 JSON：
 {
   "levelTitle": "string (例如：LV.3 跨界連結期)",
   "brief": "string (約30字的大腦狀態評估)",
@@ -1100,7 +1563,8 @@ ${knowledgeDigest}
           generationConfig: { responseMimeType: "application/json" }
         };
 
-        const response = await fetchWithRetry(getGeminiEndpoint(), {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        const response = await fetchWithRetry(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -1151,18 +1615,19 @@ ${knowledgeDigest}
         return;
       }
 
-      showToast("AI 顧問正在綜觀你的筆記進行深度思考...", "info");
+      showToast("AI 顧問正在深度思考中...", "info");
 
       const titles = knowledgeItems.map(i => `《${i.title}》(${i.category})`).join("、");
       const prompt = `
 使用者的資料庫目前收藏了：${titles}。
 使用者向你提問：「${customQuestion}」
-請根據他收藏的知識資產，給出 2 條具體、犀利且充滿智慧的實行指引。直接切入重點，語氣親切專業。
+請根據他收藏的知識與新聞資產，給出 2 條具體、犀利且充滿智慧的實行指引。直接切入重點，語氣親切專業。
 `;
 
       try {
         const payload = { contents: [{ parts: [{ text: prompt }] }] };
-        const response = await fetchWithRetry(getGeminiEndpoint(), {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        const response = await fetchWithRetry(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -1188,7 +1653,7 @@ ${knowledgeDigest}
       const input = document.getElementById("quick-input");
       const val = input.value.trim();
       if (!val) {
-        showToast("請輸入內容、文章標題或網址", "info");
+        showToast("請貼上網頁連結、YouTube、IG 或輸入想法", "info");
         return;
       }
       input.value = "";
@@ -1336,7 +1801,20 @@ ${knowledgeDigest}
       document.getElementById("detail-category").innerText = item.category;
       document.getElementById("detail-date").innerText = item.date;
       document.getElementById("detail-summary").innerText = item.summary;
-      document.getElementById("detail-badge-type").innerText = getTypeName(item.type);
+      
+      const badgeEl = document.getElementById("detail-badge-type");
+      badgeEl.outerHTML = `<span id="detail-badge-type">${getTypeBadge(item.type)}</span>`;
+
+      const thumbContainer = document.getElementById("detail-thumbnail-container");
+      const thumbImg = document.getElementById("detail-thumbnail-img");
+      const thumbPlayBtn = document.getElementById("detail-thumbnail-playbtn");
+      if (item.thumbnail) {
+        thumbImg.src = item.thumbnail;
+        thumbPlayBtn.href = item.url || "#";
+        thumbContainer.classList.remove("hidden");
+      } else {
+        thumbContainer.classList.add("hidden");
+      }
 
       const takeawaysEl = document.getElementById("detail-takeaways");
       takeawaysEl.innerHTML = (item.takeaways || []).map(t => `
@@ -1366,7 +1844,7 @@ ${knowledgeDigest}
       const reanalyzeBtn = document.getElementById("detail-reanalyze-btn");
       reanalyzeBtn.onclick = () => {
         closeModal("detailModal");
-        ingestWithGemini(item.url || item.title, item.summary !== item.title ? item.summary : "", item.type, "", item.id);
+        ingestWithGemini(item.url || item.title, "", item.type, "", item.id);
       };
 
       document.getElementById("detail-delete-btn").onclick = () => deleteItem(item.id);
@@ -1396,24 +1874,101 @@ ${knowledgeDigest}
       else banner.classList.add("hidden");
     }
 
+    function updateSettingsModalUI() {
+      const key = getActiveApiKey();
+      const inputEl = document.getElementById("settings-api-key");
+      const displayEl = document.getElementById("settings-current-key-display");
+      const testStatusEl = document.getElementById("test-key-status");
+      
+      testStatusEl.classList.add("hidden");
+
+      if (key) {
+        inputEl.value = key;
+        const short = key.slice(-4);
+        displayEl.innerHTML = `<span class="text-emerald-700 font-medium">🟢 已儲存金鑰：AIzaSy••••••••${short}</span>`;
+      } else {
+        inputEl.value = "";
+        displayEl.innerHTML = `<span class="text-rose-600 font-medium">🔴 目前尚未儲存金鑰</span>`;
+      }
+    }
+
     function openSettingsModal() {
-      const existingKey = localStorage.getItem(STORAGE_KEY_API) || "";
-      document.getElementById("settings-api-key").value = existingKey;
+      updateSettingsModalUI();
       openModal("settingsModal");
     }
 
-    function saveSettings() {
-      const keyVal = document.getElementById("settings-api-key").value.trim();
-      if (keyVal) {
-        localStorage.setItem(STORAGE_KEY_API, keyVal);
+    async function saveSettings() {
+      const inputEl = document.getElementById("settings-api-key");
+      const rawVal = inputEl.value.trim();
+      const cleanKey = extractCleanApiKey(rawVal);
+
+      if (cleanKey) {
+        await persistApiKey(cleanKey);
         showToast("✅ API Key 設定成功！AI 智慧大腦已啟動", "success");
       } else {
-        localStorage.removeItem(STORAGE_KEY_API);
+        await persistApiKey("");
         showToast("已清除 API Key", "info");
       }
-      checkApiKeyStatus();
+
       closeModal("settingsModal");
       generateGrowthInsights(false);
+    }
+
+    async function testApiKeyConnection() {
+      const inputEl = document.getElementById("settings-api-key");
+      const testStatusEl = document.getElementById("test-key-status");
+      const keyToTest = extractCleanApiKey(inputEl.value.trim()) || getActiveApiKey();
+
+      if (!keyToTest) {
+        testStatusEl.className = "mt-2 p-2.5 rounded-lg text-xs leading-relaxed border bg-rose-50 border-rose-200 text-rose-700";
+        testStatusEl.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1"></i> 請先貼入 API Key 再進行測試`;
+        testStatusEl.classList.remove("hidden");
+        return;
+      }
+
+      testStatusEl.className = "mt-2 p-2.5 rounded-lg text-xs leading-relaxed border bg-indigo-50 border-indigo-200 text-indigo-700";
+      testStatusEl.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-1"></i> 正在連線 Google 伺服器驗證金鑰...`;
+      testStatusEl.classList.remove("hidden");
+
+      try {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${keyToTest}`;
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ contents: [{ parts: [{ text: "ping" }] }] })
+        });
+
+        if (res.ok) {
+          testStatusEl.className = "mt-2 p-2.5 rounded-lg text-xs leading-relaxed border bg-emerald-50 border-emerald-200 text-emerald-800 font-semibold";
+          testStatusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> 連線成功！您的 Gemini API Key 有效且運作正常。`;
+          await persistApiKey(keyToTest);
+          updateSettingsModalUI();
+        } else {
+          const errData = await res.json().catch(() => ({}));
+          const errMsg = errData?.error?.message || `HTTP ${res.status}`;
+          testStatusEl.className = "mt-2 p-2.5 rounded-lg text-xs leading-relaxed border bg-rose-50 border-rose-200 text-rose-700";
+          testStatusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> 驗證未通過 (${errMsg})，請確認金鑰是否完整複製。`;
+        }
+      } catch (err) {
+        testStatusEl.className = "mt-2 p-2.5 rounded-lg text-xs leading-relaxed border bg-rose-50 border-rose-200 text-rose-700";
+        testStatusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> 連線超時或網路失敗：${escapeHtml(err.message)}`;
+      }
+    }
+
+    function copyAutoConfigLink() {
+      const key = getActiveApiKey();
+      if (!key) {
+        showToast("請先填寫並儲存 API Key 後再複製專屬連結！", "info");
+        return;
+      }
+      const baseUrl = window.location.origin + window.location.pathname;
+      const directUrl = `${baseUrl}?key=${encodeURIComponent(key)}`;
+      
+      navigator.clipboard.writeText(directUrl).then(() => {
+        showToast("🔗 專屬直達網址已複製！在任何瀏覽器貼上都會自動綁定 Key", "success");
+      }).catch(() => {
+        prompt("請複製以下網址：", directUrl);
+      });
     }
 
     function exportDataToJson() {
@@ -1485,21 +2040,36 @@ ${knowledgeDigest}
       }, 3500);
     }
 
-    function getTypeIcon(type) {
+    function getTypeBadge(type) {
       switch (type) {
-        case "video": return '<i class="fa-brands fa-youtube text-red-500"></i>';
-        case "link": return '<i class="fa-solid fa-globe text-blue-500"></i>';
-        case "note": return '<i class="fa-solid fa-lightbulb text-amber-500"></i>';
-        default: return '<i class="fa-regular fa-newspaper text-indigo-500"></i>';
-      }
-    }
-
-    function getTypeName(type) {
-      switch (type) {
-        case "video": return "影音精華";
-        case "link": return "網頁連結";
-        case "note": return "隨手靈感";
-        default: return "深度專文";
+        case "article":
+          return `<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 flex items-center gap-1.5 border border-indigo-200">
+                    <i class="fa-regular fa-newspaper text-indigo-600"></i><span>深度專文</span>
+                  </span>`;
+        case "youtube":
+          return `<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-red-50 text-red-600 flex items-center gap-1.5 border border-red-200">
+                    <i class="fa-brands fa-youtube text-red-600"></i><span>YouTube 影音</span>
+                  </span>`;
+        case "shorts":
+          return `<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-red-50 text-red-500 flex items-center gap-1.5 border border-red-200">
+                    <i class="fa-solid fa-play text-red-500 text-[10px]"></i><span>YT Shorts</span>
+                  </span>`;
+        case "instagram":
+          return `<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-pink-50 text-pink-700 flex items-center gap-1.5 border border-pink-200">
+                    <i class="fa-brands fa-instagram text-pink-600"></i><span>IG Reels / 貼文</span>
+                  </span>`;
+        case "link":
+          return `<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 flex items-center gap-1.5 border border-blue-200">
+                    <i class="fa-solid fa-globe text-blue-500"></i><span>網頁連結</span>
+                  </span>`;
+        case "note":
+          return `<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 flex items-center gap-1.5 border border-amber-200">
+                    <i class="fa-solid fa-lightbulb text-amber-500"></i><span>隨手靈感</span>
+                  </span>`;
+        default:
+          return `<span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 flex items-center gap-1.5 border border-slate-200">
+                    <i class="fa-regular fa-newspaper text-indigo-500"></i><span>深度專文</span>
+                  </span>`;
       }
     }
 
@@ -1533,8 +2103,8 @@ ${knowledgeDigest}
       }
     }
 
-    window.addEventListener("DOMContentLoaded", () => {
-      checkApiKeyStatus();
+    window.addEventListener("DOMContentLoaded", async () => {
+      await resolveApiKeyOnBoot();
       renderSidebarTaxonomy();
       renderKnowledgeFeed();
       generateGrowthInsights(false);
