@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synapse Hub - 個人智慧知識庫與成長顧問</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    .line-clamp-2 {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .line-clamp-3 {
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.6; }
+    }
+    .animate-subtle {
+      animation: pulse-subtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+  <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200">
+    <div class="max-w-[1700px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-4">
+      <!-- Brand Logo -->
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-500 to-purple-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+          <i class="fa-solid fa-brain text-lg"></i>
+        </div>
+        <div>
+          <span class="text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-brand-600 to-indigo-800 tracking-tight">Synapse</span>
+          <span class="text-xs font-semibold px-2 py-0.5 ml-1.5 rounded-full bg-brand-50 text-brand-600 border border-brand-200">AI 智慧大腦</span>
+          <p class="text-[11px] text-slate-600 hidden sm:block">持續自組織知識庫 & 人生工作成長顧問</p>
+        </div>
+      </div>
+
+      <!-- Quick Metrics & Global Controls -->
+      <div class="flex items-center gap-2 sm:gap-4">
+        <!-- Stats Badges -->
+        <div class="hidden md:flex items-center gap-3 px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-600">
+          <div class="flex items-center gap-1.5">
+            <i class="fa-solid fa-layer-group text-brand-500"></i>
+            <span>資料總數:</span>
+            <span id="metric-total-items" class="font-bold text-slate-800">0</span>
+          </div>
+          <span class="text-slate-300">|</span>
+          <div class="flex items-center gap-1.5">
+            <i class="fa-solid fa-folder-tree text-purple-500"></i>
+            <span>動態分類:</span>
+            <span id="metric-total-cats" class="font-bold text-slate-800">0</span>
+          </div>
+        </div>
+
+        <!-- Quick Capture CTA -->
+        <button onclick="openModal('addModal')" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white rounded-xl font-medium text-sm shadow-sm shadow-brand-600/30 transition-all active:scale-95">
+          <i class="fa-solid fa-plus text-xs"></i>
+          <span>收集新內容</span>
+        </button>
+
+        <!-- Settings & API Key Configuration -->
+        <button onclick="openSettingsModal()" title="設定 Gemini API Key 與資料備份" class="p-2 text-slate-500 hover:text-slate-800 rounded-xl hover:bg-slate-100 border border-slate-200 transition">
+          <i class="fa-solid fa-gear"></i>
+        </button>
+
+        <!-- Toggle Mobile Panels -->
+        <button onclick="toggleMobilePanel('leftSidebar')" class="lg:hidden p-2 text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-100">
+          <i class="fa-solid fa-bars-staggered"></i>
+        </button>
+        <button onclick="toggleMobilePanel('rightSidebar')" class="xl:hidden p-2 text-indigo-600 hover:text-indigo-800 rounded-lg hover:bg-indigo-50">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div class="flex-1 max-w-[1700px] w-full mx-auto px-4 sm:px-6 py-6 grid grid-cols-12 gap-6 items-start">
+    
+    <!-- LEFT SIDEBAR: Dynamic Categories & Filtering -->
+    <aside id="leftSidebar" class="hidden lg:block col-span-12 lg:col-span-3 xl:col-span-3 bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <h2 class="text-sm font-bold text-slate-800 uppercase tracking-wider flex items-center gap-2">
+          <i class="fa-solid fa-compass text-brand-600"></i>
+          <span>知識導航中心</span>
+        </h2>
+        <button onclick="resetFilters()" class="text-xs text-slate-600 hover:text-brand-600 transition flex items-center gap-1 font-medium">
+          <i class="fa-solid fa-rotate-left text-[10px]"></i> 重置
+        </button>
+      </div>
+
+      <!-- Quick Status Filters -->
+      <div class="space-y-1 mb-6">
+        <button onclick="setFilter('all', 'type')" class="filter-type-btn w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium transition text-brand-700 bg-brand-50" data-type="all">
+          <span class="flex items-center gap-2.5">
+            <i class="fa-regular fa-folder-open w-4 text-center"></i>
+            全部內容
+          </span>
+          <span id="badge-all-count" class="text-xs px-2 py-0.5 rounded-full bg-brand-100 text-brand-700 font-semibold">0</span>
+        </button>
+        <button onclick="setFilter('favorite', 'type')" class="filter-type-btn w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm font-medium transition text-slate-600 hover:bg-slate-50" data-type="favorite">
+          <span class="flex items-center gap-2.5">
+            <i class="fa-solid fa-star text-amber-400 w-4 text-center"></i>
+            星標收藏
+          </span>
+          <span id="badge-fav-count" class="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-medium">0</span>
+        </button>
+      </div>
+
+      <!-- Content Media Types -->
+      <div class="mb-6">
+        <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider block mb-2 px-1">內容載體</span>
+        <div class="grid grid-cols-2 gap-1.5 text-xs">
+          <button onclick="setMediaFilter('article')" class="media-btn flex items-center gap-2 px-2.5 py-2 rounded-lg border border-slate-200 text-slate-600 hover:border-brand-500 hover:text-brand-600 transition" data-media="article">
+            <i class="fa-regular fa-newspaper text-indigo-500"></i> 文章筆記
+          </button>
+          <button onclick="setMediaFilter('video')" class="media-btn flex items-center gap-2 px-2.5 py-2 rounded-lg border border-slate-200 text-slate-600 hover:border-brand-500 hover:text-brand-600 transition" data-media="video">
+            <i class="fa-brands fa-youtube text-red-500"></i> 影片影音
+          </button>
+          <button onclick="setMediaFilter('link')" class="media-btn flex items-center gap-2 px-2.5 py-2 rounded-lg border border-slate-200 text-slate-600 hover:border-brand-500 hover:text-brand-600 transition" data-media="link">
+            <i class="fa-solid fa-globe text-blue-500"></i> 外部連結
+          </button>
+          <button onclick="setMediaFilter('note')" class="media-btn flex items-center gap-2 px-2.5 py-2 rounded-lg border border-slate-200 text-slate-600 hover:border-brand-500 hover:text-brand-600 transition" data-media="note">
+            <i class="fa-solid fa-lightbulb text-amber-500"></i> 隨手靈感
+          </button>
+        </div>
+      </div>
+
+      <!-- AI Dynamic Categories Section -->
+      <div class="mb-6">
+        <div class="flex items-center justify-between mb-2 px-1">
+          <span class="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+            <i class="fa-solid fa-tags text-purple-600"></i>
+            AI 自動演進分類
+          </span>
+          <span class="text-[10px] text-brand-600 font-medium bg-brand-50 px-1.5 py-0.5 rounded">自組織</span>
+        </div>
+        <div id="category-list" class="space-y-1">
+          <!-- Dynamic categories injected by JS -->
+          <div class="p-4 text-center text-xs text-slate-600">正在分析分類...</div>
+        </div>
+      </div>
+
+      <!-- Tags Cloud -->
+      <div>
+        <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider block mb-2.5 px-1">主題關鍵字標籤</span>
+        <div id="tag-cloud" class="flex flex-wrap gap-1.5">
+          <!-- Dynamic tags injected by JS -->
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER FEED: Smart Search, Quick Drop & Knowledge Cards -->
+    <main class="col-span-12 lg:col-span-9 xl:col-span-6 space-y-5">
+      
+      <!-- Quick Input Bar (Direct Ingestion) -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 transition-all focus-within:ring-2 focus-within:ring-brand-500/20 focus-within:border-brand-500">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
+            <i class="fa-solid fa-bolt-lightning"></i>
+          </div>
+          <input id="quick-input" type="text" placeholder="直接貼上網址、文章段落、YouTube 或隨手靈感..." 
+            class="w-full bg-transparent border-0 text-sm focus:outline-none placeholder:text-slate-600"
+            onkeydown="if(event.key === 'Enter') handleQuickIngest()"
+          />
+          <button onclick="handleQuickIngest()" id="quick-submit-btn" class="shrink-0 px-4 py-2 bg-slate-900 hover:bg-brand-600 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 transition active:scale-95 shadow-sm">
+            <span>AI 智能解析</span>
+            <i class="fa-solid fa-arrow-right text-[10px]"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search, Sorting & Filter Status -->
+      <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-3 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <!-- Keyword Search Input -->
+        <div class="relative w-full sm:w-80">
+          <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600 text-xs"></i>
+          <input id="search-input" type="text" placeholder="關鍵字快速全文檢索..." 
+            class="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:bg-white focus:outline-none focus:border-brand-500 transition"
+            oninput="handleSearch(this.value)"
+          />
+          <button id="clear-search-btn" onclick="clearSearch()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-600">
+            <i class="fa-solid fa-circle-xmark text-xs"></i>
+          </button>
+        </div>
+
+        <!-- Sort & Filter Pills -->
+        <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+          <div id="active-filter-indicator" class="hidden text-xs text-brand-600 bg-brand-50 px-2.5 py-1 rounded-lg font-medium items-center gap-1.5">
+            <span id="active-filter-text">分類: 全部</span>
+            <button onclick="resetFilters()" class="hover:text-brand-800"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          
+          <select id="sort-select" onchange="renderKnowledgeFeed()" class="bg-slate-50 border border-slate-200 text-slate-600 text-xs rounded-xl px-2.5 py-2 focus:outline-none focus:border-brand-500 font-medium">
+            <option value="newest">📅 最新收錄</option>
+            <option value="oldest">📅 最早收錄</option>
+            <option value="title">🔤 標題名稱</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Ingestion Loading Progress Banner -->
+      <div id="ai-processing-card" class="hidden bg-gradient-to-r from-brand-600/10 via-purple-600/10 to-indigo-600/10 border border-brand-500/30 rounded-2xl p-4 transition-all">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-lg bg-brand-600 text-white flex items-center justify-center animate-spin">
+            <i class="fa-solid fa-circle-notch text-sm"></i>
+          </div>
+          <div class="flex-1">
+            <h4 class="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+              <span>Gemini AI 正在深度解讀與彙整中...</span>
+              <span class="animate-subtle text-brand-600 font-normal">提取摘要、分類標籤、人生與工作心法</span>
+            </h4>
+            <div class="w-full bg-slate-200/80 rounded-full h-1.5 mt-2 overflow-hidden">
+              <div class="bg-gradient-to-r from-brand-500 to-purple-500 h-1.5 rounded-full w-2/3 animate-pulse"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Knowledge Cards Grid / Feed Container -->
+      <div id="knowledge-feed" class="space-y-4">
+        <!-- Dynamic Cards rendered by JavaScript -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="hidden bg-white rounded-2xl border border-dashed border-slate-300 p-12 text-center">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-slate-50 text-slate-600 flex items-center justify-center text-2xl">
+          <i class="fa-regular fa-folder-open"></i>
+        </div>
+        <h3 class="text-sm font-bold text-slate-700 mb-1">找不到相符的筆記內容</h3>
+        <p class="text-xs text-slate-600 max-w-sm mx-auto mb-4">試著切換不同分類或搜尋關鍵字，或者貼上任何連結立即讓 AI 萃取收納。</p>
+        <button onclick="resetFilters()" class="text-xs px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium transition">
+          顯示全部內容
+        </button>
+      </div>
+    </main>
+
+    <!-- RIGHT SIDEBAR: AI Growth Companion / Life & Work Mentor -->
+    <aside id="rightSidebar" class="hidden xl:block col-span-12 xl:col-span-3 bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+      
+      <!-- Advisor Header -->
+      <div class="flex items-center justify-between pb-3.5 border-b border-slate-100 mb-4">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-lg bg-gradient-to-tr from-purple-600 to-brand-500 flex items-center justify-center text-white text-xs shadow-sm">
+            <i class="fa-solid fa-sparkles"></i>
+          </div>
+          <div>
+            <h2 class="text-sm font-bold text-slate-800">AI 人生與工作教練</h2>
+            <p class="text-[10px] text-slate-600">與知識庫同步進化的智慧顧問</p>
+          </div>
+        </div>
+        <button onclick="generateGrowthInsights(true)" id="refresh-insights-btn" title="綜觀整個知識庫重新生成洞察" class="p-1.5 text-slate-600 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition">
+          <i class="fa-solid fa-arrows-rotate text-xs"></i>
+        </button>
+      </div>
+
+      <!-- Growth Status Pill -->
+      <div class="bg-gradient-to-br from-indigo-50/70 via-purple-50/50 to-pink-50/50 border border-indigo-100/80 rounded-xl p-3 mb-4">
+        <div class="flex items-center justify-between mb-1.5">
+          <span class="text-[11px] font-bold text-indigo-900 flex items-center gap-1.5">
+            <span class="relative flex h-2 w-2">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+            </span>
+            大腦累積度：<span id="advisor-level" class="text-indigo-600">LV.3 跨界連結期</span>
+          </span>
+          <span id="advisor-item-count" class="text-[10px] text-indigo-700 bg-white/80 px-1.5 py-0.5 rounded font-semibold border border-indigo-200/50">已整合 5 份知識</span>
+        </div>
+        <p class="text-[11px] text-indigo-800/80 leading-relaxed" id="advisor-brief">
+          正在從你的工作效率、AI科技與哲學隨筆中抽絲剝繭，為你提煉可執行的思考心法。
+        </p>
+      </div>
+
+      <!-- Dynamic Insights Cards Container -->
+      <div id="advisor-content" class="space-y-4">
+        
+        <!-- Work & Career Advice Module -->
+        <div class="border border-slate-100 bg-slate-50/70 rounded-xl p-3.5 transition hover:shadow-xs">
+          <div class="flex items-center gap-2 mb-2 text-xs font-bold text-slate-800">
+            <i class="fa-solid fa-briefcase text-brand-600"></i>
+            <span>🎯 工作實踐與效能推進</span>
+          </div>
+          <div id="work-advice-body" class="text-xs text-slate-600 leading-relaxed space-y-2">
+            <p>💡 <strong class="text-slate-800">聚焦重要槓桿：</strong>結合您收錄的筆記，將例行任務交由工作流範式自動化，將時間集中在高價值的決策架構上。</p>
+            <p>⚡ <strong class="text-slate-800">立即行動點：</strong>為近期的三個主要目標設定明確的「非死線限制」，減少認知切換損耗。</p>
+          </div>
+        </div>
+
+        <!-- Life & Philosophy Advice Module -->
+        <div class="border border-slate-100 bg-slate-50/70 rounded-xl p-3.5 transition hover:shadow-xs">
+          <div class="flex items-center gap-2 mb-2 text-xs font-bold text-slate-800">
+            <i class="fa-solid fa-seedling text-emerald-600"></i>
+            <span>🌱 人生哲學與心智修煉</span>
+          </div>
+          <div id="life-advice-body" class="text-xs text-slate-600 leading-relaxed space-y-2">
+            <p>🧘 <strong class="text-slate-800">內在沉澱：</strong>知識的價值在於轉化而非單純囤積。給自己預留固定的「白紙思考時間」，讓不同領域的概念碰撞產生洞察。</p>
+          </div>
+        </div>
+
+        <!-- Cross-domain Blindspots & Connection -->
+        <div class="border border-slate-100 bg-slate-50/70 rounded-xl p-3.5 transition hover:shadow-xs">
+          <div class="flex items-center gap-2 mb-2 text-xs font-bold text-slate-800">
+            <i class="fa-solid fa-puzzle-piece text-purple-600"></i>
+            <span>🧩 跨領域思維連結</span>
+          </div>
+          <div id="cross-advice-body" class="text-xs text-slate-600 leading-relaxed">
+            <p>目前「人工智慧」與「個人哲學」兩大分類出現有趣的交集：嘗試用系統論的視角來重新檢視自己的生活習慣設計。</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Quick Interactive Inquiries -->
+      <div class="mt-5 pt-4 border-t border-slate-100">
+        <span class="text-[11px] font-bold text-slate-600 uppercase tracking-wider block mb-2">啟動反思對話</span>
+        <div class="space-y-1.5">
+          <button onclick="askMentorCustomPrompt('根據我最近收集的內容，給我 3 個下週可立即實行的行動指南')" class="w-full text-left text-xs p-2 rounded-lg bg-white hover:bg-brand-50 border border-slate-200 hover:border-brand-300 text-slate-700 transition flex items-center justify-between group">
+            <span class="truncate">🚀 給我 3 個下週可實行指南</span>
+            <i class="fa-solid fa-chevron-right text-[10px] text-slate-600 group-hover:text-brand-600"></i>
+          </button>
+          <button onclick="askMentorCustomPrompt('指出我目前的知識收集有哪些潛在盲點？下一步建議補充什麼領域？')" class="w-full text-left text-xs p-2 rounded-lg bg-white hover:bg-brand-50 border border-slate-200 hover:border-brand-300 text-slate-700 transition flex items-center justify-between group">
+            <span class="truncate">🔍 檢視知識盲點與下一步學習</span>
+            <i class="fa-solid fa-chevron-right text-[10px] text-slate-600 group-hover:text-brand-600"></i>
+          </button>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- MODAL: Add New Knowledge (Full Details) -->
+  <div id="addModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 transform transition-all scale-100 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center">
+            <i class="fa-solid fa-plus text-sm"></i>
+          </div>
+          <h3 class="text-base font-bold text-slate-800">收納新知識到大腦</h3>
+        </div>
+        <button onclick="closeModal('addModal')" class="text-slate-600 hover:text-slate-600 p-1.5 rounded-lg">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="add-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">內容來源 (網址連結、文字或標題)</label>
+          <input type="text" id="modal-url-input" placeholder="https://... 或輸入文章主題" required 
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">摘錄內容 / 心得筆記 (可選)</label>
+          <textarea id="modal-text-input" rows="4" placeholder="可以直接貼上文章精彩段落、YouTube 影片重點，或個人的隨手想法...（若留空，AI 將自動抓取並提煉）" 
+            class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:border-brand-500 focus:bg-white transition"></textarea>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">載體類型</label>
+            <select id="modal-type-select" class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-brand-500">
+              <option value="auto">✨ AI 自動判斷</option>
+              <option value="article">📄 深度文章</option>
+              <option value="video">🎬 影片影音</option>
+              <option value="link">🌐 網頁連結</option>
+              <option value="note">💡 個人思考</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5">自訂分類 (若想強制歸類)</label>
+            <input type="text" id="modal-cat-input" placeholder="留空由 AI 自動組織" 
+              class="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-brand-500 focus:bg-white transition"
+            />
+          </div>
+        </div>
+
+        <div class="pt-3 border-t border-slate-100 flex items-center justify-end gap-2.5">
+          <button type="button" onclick="closeModal('addModal')" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
+            取消
+          </button>
+          <button type="submit" id="modal-submit-btn" class="px-5 py-2.5 rounded-xl text-xs font-semibold bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white shadow-sm transition active:scale-95 flex items-center gap-2">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>AI 提煉並歸納入庫</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: View Knowledge Detail & Insights -->
+  <div id="detailModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-start justify-between gap-4 pb-4 border-b border-slate-100">
+        <div>
+          <div class="flex items-center gap-2 mb-1.5">
+            <span id="detail-badge-type" class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-brand-50 text-brand-600 border border-brand-200">文章</span>
+            <span id="detail-category" class="text-[11px] font-semibold text-purple-700 bg-purple-50 px-2 py-0.5 rounded-full border border-purple-200">工作心智與效率</span>
+            <span id="detail-date" class="text-[11px] text-slate-600">2026-10-17</span>
+          </div>
+          <h2 id="detail-title" class="text-lg sm:text-xl font-bold text-slate-800 leading-snug">筆記標題</h2>
+        </div>
+        <button onclick="closeModal('detailModal')" class="text-slate-600 hover:text-slate-600 p-1.5 rounded-lg shrink-0">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="py-5 space-y-5">
+        <!-- AI Summary Block -->
+        <div class="p-4 rounded-2xl bg-gradient-to-r from-indigo-50/70 via-brand-50/50 to-white border border-brand-200/60">
+          <h4 class="text-xs font-bold text-brand-900 flex items-center gap-1.5 mb-2">
+            <i class="fa-solid fa-sparkles text-brand-600"></i>
+            AI 核心摘要
+          </h4>
+          <p id="detail-summary" class="text-xs sm:text-sm text-slate-700 leading-relaxed"></p>
+        </div>
+
+        <!-- Key Takeaways -->
+        <div>
+          <h4 class="text-xs font-bold text-slate-800 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+            <i class="fa-solid fa-list-check text-indigo-500"></i>
+            重點提煉 (Key Takeaways)
+          </h4>
+          <ul id="detail-takeaways" class="space-y-2 text-xs sm:text-sm text-slate-600">
+            <!-- Injected by JS -->
+          </ul>
+        </div>
+
+        <!-- Life & Work Advice Connection -->
+        <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/60">
+          <h4 class="text-xs font-bold text-amber-900 flex items-center gap-1.5 mb-1.5">
+            <i class="fa-solid fa-lightbulb text-amber-600"></i>
+            這篇知識對我的人生或工作有何啟發？
+          </h4>
+          <p id="detail-impact" class="text-xs sm:text-sm text-amber-900/80 leading-relaxed"></p>
+        </div>
+
+        <!-- Original Source Link / Raw Text -->
+        <div id="detail-source-section">
+          <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">來源位址</h4>
+          <a id="detail-source-link" href="#" target="_blank" rel="noopener noreferrer" class="text-xs text-brand-600 hover:underline break-all flex items-center gap-1.5">
+            <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            <span id="detail-source-url">https://...</span>
+          </a>
+        </div>
+
+        <!-- Tags List -->
+        <div>
+          <h4 class="text-xs font-bold text-slate-600 uppercase tracking-wider mb-2">關聯標籤</h4>
+          <div id="detail-tags" class="flex flex-wrap gap-1.5"></div>
+        </div>
+      </div>
+
+      <div class="pt-4 border-t border-slate-100 flex items-center justify-between">
+        <button id="detail-delete-btn" class="text-xs text-rose-500 hover:text-rose-700 font-medium flex items-center gap-1">
+          <i class="fa-regular fa-trash-can"></i> 刪除此項
+        </button>
+        <button onclick="closeModal('detailModal')" class="px-5 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl text-xs font-semibold transition">
+          關閉
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Settings & Standalone API Key Configuration -->
+  <div id="settingsModal" class="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 mb-4">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+            <i class="fa-solid fa-gear text-sm"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-slate-800">雲端設定與資料備份</h3>
+            <p class="text-[11px] text-slate-500">上傳至網路獨立運作所需之設定</p>
+          </div>
+        </div>
+        <button onclick="closeModal('settingsModal')" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="space-y-5">
+        <!-- API Key Setup -->
+        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="text-xs font-bold text-slate-800 uppercase tracking-wider flex items-center gap-1.5">
+              <i class="fa-solid fa-key text-brand-600"></i>
+              Google Gemini API Key
+            </label>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer" class="text-[11px] text-brand-600 hover:underline flex items-center gap-1">
+              免費領取 Key <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+            </a>
+          </div>
+          <p class="text-[11px] text-slate-500 mb-2 leading-relaxed">
+            當網站上線至 GitHub / Netlify 時，可在此填入專屬 API Key（完全免費申請），金鑰會安全存放在瀏覽器本機，不外洩。
+          </p>
+          <input type="password" id="settings-api-key" placeholder="AIzaSy..." 
+            class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-mono focus:outline-none focus:border-brand-500"
+          />
+        </div>
+
+        <!-- Data Backup & Restore -->
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-slate-800 uppercase tracking-wider block">資料保存與遷移</label>
+          <div class="grid grid-cols-2 gap-2">
+            <button onclick="exportDataToJson()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-xl transition flex items-center justify-center gap-1.5">
+              <i class="fa-solid fa-download"></i> 匯出備份 JSON
+            </button>
+            <label class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-xl transition flex items-center justify-center gap-1.5 cursor-pointer">
+              <i class="fa-solid fa-upload"></i> 匯入還原資料
+              <input type="file" id="import-file-input" accept=".json" onchange="importDataFromJson(event)" class="hidden" />
+            </label>
+          </div>
+          <p class="text-[10px] text-slate-400">目前所有筆記皆自動即時保存在瀏覽器 LocalStorage 中，換裝置時可匯出備份。</p>
+        </div>
+      </div>
+
+      <div class="pt-4 mt-5 border-t border-slate-100 flex items-center justify-end gap-2.5">
+        <button onclick="closeModal('settingsModal')" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition">
+          取消
+        </button>
+        <button onclick="saveSettings()" class="px-5 py-2 rounded-xl text-xs font-semibold bg-brand-600 hover:bg-brand-700 text-white shadow-sm transition active:scale-95">
+          儲存設定
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- JAVASCRIPT APPLICATION CORE -->
+  <script>
+    // Storage Keys
+    const STORAGE_ITEMS_KEY = "synapse_hub_items_v1";
+    const STORAGE_KEY_API = "synapse_hub_gemini_api_key";
+
+    // Global API Configuration with Dynamic Fallback
+    const defaultApiKey = ""; // Runtime provides in environment if blank
+    function getActiveApiKey() {
+      const customKey = localStorage.getItem(STORAGE_KEY_API);
+      return (customKey && customKey.trim()) ? customKey.trim() : defaultApiKey;
+    }
+
+    function getGeminiEndpoint() {
+      const key = getActiveApiKey();
+      return `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${key}`;
+    }
+
+    // Default Seed Data
+    const defaultInitialItems = [
+      {
+        id: "k-1",
+        title: "大腦的外部化：現代知識工作者的第二大腦 (Building a Second Brain)",
+        url: "https://fortelabs.com/blog/basboverview/",
+        type: "article",
+        category: "工作心智與效率",
+        summary: "核心觀念在於將記憶負擔從生物大腦卸載至數位系統，透過 CODE 框架（Capture, Organize, Distill, Express）完成知識從吸收到輸出的閉環。",
+        takeaways: [
+          "大腦是用來產生想法的，而不是用來死記想法的。",
+          "組織資料不是以『來源類別』劃分，而是以『當前專案與可執行性』劃分（PARA法）。",
+          "提煉才是掌握知識的關鍵，逐步將長文濃縮至幾句金句。"
+        ],
+        impact: "在日常工作中不再害怕遺漏資訊，隨時能借力過往積累的高質量思考素材快速啟動專案。",
+        tags: ["第二大腦", "知識管理", "效率工具", "心智模型"],
+        favorite: true,
+        date: "2026-10-15"
+      },
+      {
+        id: "k-2",
+        title: "大語言模型（LLM）的推理極限與人機協作新典範",
+        url: "https://arxiv.org/abs/reasoning-paradigms",
+        type: "link",
+        category: "人工智慧與未來",
+        summary: "探討 AI 從單純的機率文字補全演進至具備系統二思考（System 2 Reasoning）的推演助手，未來核心競爭力在於人類提出精準問題與批判性評估的能力。",
+        takeaways: [
+          "Prompt Engineering 正在轉變為 Agent 協作架構的設計思維。",
+          "AI 能迅速消除知識門檻，但跨領域直覺與價值觀選擇仍依賴人類。",
+          "個人工作者將成為小型超級個體（Super Individual），擁有整座專家團隊的效能。"
+        ],
+        impact: "工作上應把 AI 當作隨時在線的對偶思維教練，而不是單純的搜尋引擎。",
+        tags: ["AI", "人工智慧", "人機協作", "科技趨勢"],
+        favorite: true,
+        date: "2026-10-16"
+      },
+      {
+        id: "k-3",
+        title: "沉思錄：在不確定的世界中維持內心秩序與專注",
+        url: "https://standardebooks.org/ebooks/marcus-aurelius/meditations",
+        type: "note",
+        category: "心理與人生哲學",
+        summary: "斯多葛哲學的核心原則：區分『你可以控制的』與『你無法控制的』，將全部注意力傾注在內在態度與當下的當務之急，平息外界紛擾。",
+        takeaways: [
+          "外界事態無法直接傷害你的心智，造成困擾的是你對事情的詮釋。",
+          "專注當下的職責，如同每一件事都是人生的最後一件事般全力以赴。",
+          "接受生命的流動與無常，把每一個障礙轉化為前進的道路。"
+        ],
+        impact: "在快節奏的高壓專案中保持平和心境，不再把精力浪費在焦慮無法改變的外部條件上。",
+        tags: ["斯多葛", "心態哲學", "情緒管理", "內在平靜"],
+        favorite: false,
+        date: "2026-10-14"
+      },
+      {
+        id: "k-4",
+        title: "30 分鐘搞懂極簡主義生活提案與注意力保護機制",
+        url: "https://youtube.com/watch?v=minimalism-focus",
+        type: "video",
+        category: "生活風格與健康",
+        summary: "數位時代最稀缺的資產是『未被切碎的連續注意力』。透過清理數位環境、簡化物質渴望，為真正重要的深度思考騰出空間。",
+        takeaways: [
+          "多工處理是個幻覺，本質只是高頻損耗大腦能量的任務切換。",
+          "物理環境的雜亂會持續佔用大腦潛意識的處理頻寬。",
+          "主動設定『無通知時段』，奪回日常生活的主導權。"
+        ],
+        impact: "工作產出品質取決於深度專注的時間長短，每週安排不被干擾的專注塊（Focus Block）。",
+        tags: ["專注力", "極簡主義", "數位排毒", "時間管理"],
+        favorite: false,
+        date: "2026-10-12"
+      },
+      {
+        id: "k-5",
+        title: "查理·蒙格的多元思維模型與複利人生觀",
+        url: "https://fs.blog/mental-models/",
+        type: "article",
+        category: "商業思維與投資",
+        summary: "擁有單一工具的人會把每個問題都看成釘子。真正的智慧來自跨學科的基礎模型：工程學的冗餘、生物學的演化、物理學的臨界點與經濟學的機會成本。",
+        takeaways: [
+          "反過來想，總是反過來想：想要成功，先研究如何必然導致失敗並避開它。",
+          "長期主義的本質是耐得住枯燥，讓複利效應在時間維度上爆發。",
+          "在自己的能力圈邊界內行事，坦誠承認自己的無知。"
+        ],
+        impact: "在進行職涯抉擇與專案投資時，使用反向思考與機會成本清單進行決策驗證。",
+        tags: ["思維模型", "查理蒙格", "決策", "商業思維"],
+        favorite: true,
+        date: "2026-10-10"
+      }
+    ];
+
+    // Initialize state from LocalStorage or fall back to defaults
+    let knowledgeItems = [];
+    try {
+      const stored = localStorage.getItem(STORAGE_ITEMS_KEY);
+      knowledgeItems = stored ? JSON.parse(stored) : defaultInitialItems;
+    } catch (e) {
+      knowledgeItems = defaultInitialItems;
+    }
+
+    function persistKnowledge() {
+      try {
+        localStorage.setItem(STORAGE_ITEMS_KEY, JSON.stringify(knowledgeItems));
+      } catch (e) {
+        console.warn("LocalStorage quota exceeded or unavailable:", e);
+      }
+    }
+
+    // Filtering State
+    let currentCategoryFilter = "all";
+    let currentTypeFilter = "all"; // 'all' or 'favorite'
+    let currentMediaFilter = null; // 'article' | 'video' | 'link' | 'note' | null
+    let currentTagFilter = null;
+    let searchQuery = "";
+
+    // Helper: Compute dynamic category distribution
+    function getCategoriesStats() {
+      const counts = {};
+      knowledgeItems.forEach(item => {
+        const cat = item.category || "未分類";
+        counts[cat] = (counts[cat] || 0) + 1;
+      });
+      return counts;
+    }
+
+    // Helper: Compute tags distribution
+    function getTagsStats() {
+      const tagCounts = {};
+      knowledgeItems.forEach(item => {
+        if (Array.isArray(item.tags)) {
+          item.tags.forEach(t => {
+            tagCounts[t] = (tagCounts[t] || 0) + 1;
+          });
+        }
+      });
+      return tagCounts;
+    }
+
+    // Render Left Categories & Tags dynamically
+    function renderSidebarTaxonomy() {
+      const catStats = getCategoriesStats();
+      const catListEl = document.getElementById("category-list");
+      
+      const sortedCats = Object.keys(catStats).sort((a, b) => catStats[b] - catStats[a]);
+
+      // Category items
+      let html = "";
+      sortedCats.forEach(cat => {
+        const count = catStats[cat];
+        const isActive = currentCategoryFilter === cat;
+        html += `
+          <button onclick="setCategoryFilter('${escapeHtml(cat)}')" 
+            class="w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs sm:text-sm font-medium transition ${
+              isActive 
+                ? 'bg-purple-50 text-purple-700 font-semibold border border-purple-200' 
+                : 'text-slate-600 hover:bg-slate-50'
+            }">
+            <span class="flex items-center gap-2 truncate">
+              <i class="fa-solid fa-folder text-purple-400 text-xs"></i>
+              <span class="truncate">${escapeHtml(cat)}</span>
+            </span>
+            <span class="text-xs px-2 py-0.5 rounded-full ${isActive ? 'bg-purple-200 text-purple-800' : 'bg-slate-100 text-slate-600'} font-medium">${count}</span>
+          </button>
+        `;
+      });
+      catListEl.innerHTML = html || `<p class="text-xs text-slate-600 p-2 text-center">暫無分類</p>`;
+
+      // Tags cloud
+      const tagStats = getTagsStats();
+      const tagCloudEl = document.getElementById("tag-cloud");
+      const sortedTags = Object.keys(tagStats).sort((a, b) => tagStats[b] - tagStats[a]).slice(0, 15);
+
+      let tagHtml = "";
+      sortedTags.forEach(tag => {
+        const isTagActive = currentTagFilter === tag;
+        tagHtml += `
+          <button onclick="setTagFilter('${escapeHtml(tag)}')" class="text-xs px-2.5 py-1 rounded-lg border transition ${
+            isTagActive 
+              ? 'bg-brand-600 text-white border-brand-600 font-semibold shadow-xs' 
+              : 'bg-slate-50 text-slate-600 border-slate-200 hover:border-brand-400 hover:text-brand-600'
+          }">
+            #${escapeHtml(tag)} <span class="opacity-75 text-[10px]">(${tagStats[tag]})</span>
+          </button>
+        `;
+      });
+      tagCloudEl.innerHTML = tagHtml || `<span class="text-xs text-slate-600">暫無標籤</span>`;
+
+      // Update counters in Header and Badges
+      document.getElementById("metric-total-items").innerText = knowledgeItems.length;
+      document.getElementById("metric-total-cats").innerText = Object.keys(catStats).length;
+      document.getElementById("badge-all-count").innerText = knowledgeItems.length;
+      document.getElementById("badge-fav-count").innerText = knowledgeItems.filter(i => i.favorite).length;
+      document.getElementById("advisor-item-count").innerText = `已整合 ${knowledgeItems.length} 份知識`;
+    }
+
+    // Render Cards in Main Feed
+    function renderKnowledgeFeed() {
+      const feedEl = document.getElementById("knowledge-feed");
+      const emptyStateEl = document.getElementById("empty-state");
+      const sortVal = document.getElementById("sort-select").value;
+
+      // Filter
+      let items = knowledgeItems.filter(item => {
+        // Category filter
+        if (currentCategoryFilter !== "all" && item.category !== currentCategoryFilter) return false;
+        
+        // Favorites filter
+        if (currentTypeFilter === "favorite" && !item.favorite) return false;
+
+        // Media type filter
+        if (currentMediaFilter && item.type !== currentMediaFilter) return false;
+
+        // Tag filter
+        if (currentTagFilter && (!item.tags || !item.tags.includes(currentTagFilter))) return false;
+
+        // Search Query
+        if (searchQuery.trim() !== "") {
+          const q = searchQuery.toLowerCase();
+          const matchTitle = (item.title || "").toLowerCase().includes(q);
+          const matchSummary = (item.summary || "").toLowerCase().includes(q);
+          const matchCat = (item.category || "").toLowerCase().includes(q);
+          const matchTags = (item.tags || []).some(t => t.toLowerCase().includes(q));
+          const matchTakeaways = (item.takeaways || []).some(t => t.toLowerCase().includes(q));
+          if (!matchTitle && !matchSummary && !matchCat && !matchTags && !matchTakeaways) return false;
+        }
+
+        return true;
+      });
+
+      // Sort
+      if (sortVal === "newest") {
+        items.sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0));
+      } else if (sortVal === "oldest") {
+        items.sort((a, b) => new Date(a.date || 0) - new Date(b.date || 0));
+      } else if (sortVal === "title") {
+        items.sort((a, b) => (a.title || "").localeCompare(b.title || ""));
+      }
+
+      if (items.length === 0) {
+        feedEl.innerHTML = "";
+        emptyStateEl.classList.remove("hidden");
+        return;
+      }
+
+      emptyStateEl.classList.add("hidden");
+
+      let html = "";
+      items.forEach(item => {
+        const typeIcon = getTypeIcon(item.type);
+        const typeName = getTypeName(item.type);
+
+        const takeawaysPreview = (item.takeaways || []).slice(0, 2).map(t => `
+          <li class="flex items-start gap-1.5 text-xs text-slate-600">
+            <span class="text-brand-500 font-bold shrink-0">•</span>
+            <span class="line-clamp-1">${escapeHtml(t)}</span>
+          </li>
+        `).join("");
+
+        const tagsHtml = (item.tags || []).map(t => `
+          <span onclick="event.stopPropagation(); setTagFilter('${escapeHtml(t)}')" class="text-[11px] px-2 py-0.5 rounded-md bg-slate-100 hover:bg-brand-50 text-slate-600 hover:text-brand-600 transition cursor-pointer">
+            #${escapeHtml(t)}
+          </span>
+        `).join("");
+
+        html += `
+          <div onclick="openItemDetail('${item.id}')" class="group bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md hover:border-brand-300 p-5 transition-all duration-200 cursor-pointer">
+            <!-- Top Badges & Actions -->
+            <div class="flex items-center justify-between gap-2 mb-2.5">
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-700 flex items-center gap-1.5 border border-slate-200">
+                  ${typeIcon}
+                  <span>${typeName}</span>
+                </span>
+                <span onclick="event.stopPropagation(); setCategoryFilter('${escapeHtml(item.category)}')" class="text-[11px] font-medium px-2.5 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 transition">
+                  <i class="fa-solid fa-folder text-[10px] mr-1"></i>${escapeHtml(item.category)}
+                </span>
+                <span class="text-[11px] text-slate-600">${item.date || ''}</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <button onclick="event.stopPropagation(); toggleFavorite('${item.id}')" title="收藏" class="p-1.5 rounded-lg text-slate-600 hover:text-amber-400 hover:bg-amber-50 transition">
+                  <i class="${item.favorite ? 'fa-solid text-amber-400' : 'fa-regular'} fa-star text-sm"></i>
+                </button>
+                <button onclick="event.stopPropagation(); deleteItem('${item.id}')" title="刪除" class="p-1.5 rounded-lg text-slate-600 hover:text-rose-500 hover:bg-rose-50 transition">
+                  <i class="fa-regular fa-trash-can text-sm"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Title -->
+            <h3 class="text-base font-bold text-slate-800 group-hover:text-brand-600 transition leading-snug mb-2">
+              ${escapeHtml(item.title)}
+            </h3>
+
+            <!-- AI Summary Excerpt -->
+            <p class="text-xs text-slate-600 leading-relaxed line-clamp-2 mb-3">
+              ${escapeHtml(item.summary)}
+            </p>
+
+            <!-- Key Takeaways Preview -->
+            ${takeawaysPreview ? `
+              <div class="bg-slate-50/80 rounded-xl p-3 mb-3 border border-slate-100">
+                <ul class="space-y-1">
+                  ${takeawaysPreview}
+                </ul>
+              </div>
+            ` : ''}
+
+            <!-- Bottom Tags & Link -->
+            <div class="flex items-center justify-between pt-2 border-t border-slate-100 flex-wrap gap-2">
+              <div class="flex items-center gap-1.5 flex-wrap">
+                ${tagsHtml}
+              </div>
+              <span class="text-xs text-brand-600 font-semibold group-hover:translate-x-0.5 transition inline-flex items-center gap-1">
+                查看全貌與建議 <i class="fa-solid fa-arrow-right text-[10px]"></i>
+              </span>
+            </div>
+          </div>
+        `;
+      });
+
+      feedEl.innerHTML = html;
+    }
+
+    // Main Ingest Function: Calls Gemini API to classify, summarize and deduce insights
+    async function ingestWithGemini(rawInput, userNotes = "", forcedType = "auto", forcedCat = "") {
+      showProcessingBanner(true);
+
+      const existingCategories = Object.keys(getCategoriesStats());
+      const prompt = `
+你是一位頂級的個人知識工程師與思想教練。請分析使用者提供的內容（可能是網址、標題、文章節錄或思考隨筆），並將其結構化萃取為個人知識資料庫的最佳格式。
+
+【使用者的輸入資訊】：
+內容或連結：${rawInput}
+補充筆記或心得：${userNotes || "（無額外說明）"}
+指定類型偏好：${forcedType}
+指定分類偏好：${forcedCat || "（請自行組織最佳分類）"}
+
+目前資料庫已存在的分類包含：${JSON.stringify(existingCategories)}
+
+請遵循以下規則萃取並回傳純 JSON 格式（不要使用 Markdown 程式碼區塊）：
+1. title: 精準、洗鍊、具資訊密度的繁體中文標題。
+2. type: "article" (文章) | "video" (影片，若包含 youtube/bilibili 等連結則優先判斷) | "link" (一般網頁) | "note" (個人隨想筆記)。
+3. category: 歸納核心所屬分類名稱（例如："工作心智與效率"、"人工智慧與未來"、"商業思維與投資"、"心理與人生哲學"、"設計與美學"、"生活風格與健康" 等繁體中文）。如果適合現有分類，優先復用現有分類名；若屬於全新領域，請提出簡練的新分類名稱。
+4. summary: 2~3 句清晰流暢的核心摘要，提煉整篇最關鍵的觀念。
+5. takeaways: 3 條具體、實操性強的精華重點（繁體中文陣列）。
+6. impact: 1 句精闢指引，點出這篇知識對個人「工作效能」或「人生心智成長」能帶來何種啟發或行動。
+7. tags: 3~4 個關鍵標籤（繁體中文詞彙陣列）。
+
+JSON 格式規範：
+{
+  "title": "string",
+  "type": "article|video|link|note",
+  "category": "string",
+  "summary": "string",
+  "takeaways": ["重點1", "重點2", "重點3"],
+  "impact": "string",
+  "tags": ["標籤1", "標籤2", "標籤3"]
+}
+`;
+
+      try {
+        const payload = {
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            responseMimeType: "application/json"
+          }
+        };
+
+        // If the input resembles a URL, enable search grounding to fetch live web content
+        if (rawInput.startsWith("http://") || rawInput.startsWith("https://")) {
+          payload.tools = [{ "google_search": {} }];
+        }
+
+        const response = await fetchWithRetry(geminiEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (!responseText) {
+          throw new Error("AI 回應為空");
+        }
+
+        let parsed;
+        try {
+          parsed = JSON.parse(responseText);
+        } catch (e) {
+          // Fallback regex extraction if raw markdown was included
+          const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            parsed = JSON.parse(jsonMatch[0]);
+          } else {
+            throw new Error("無法解析 AI 回傳之 JSON");
+          }
+        }
+
+        // Build new knowledge item
+        const newItem = {
+          id: "k-" + Date.now(),
+          title: parsed.title || rawInput.slice(0, 50),
+          url: rawInput.startsWith("http") ? rawInput : "",
+          type: forcedType !== "auto" ? forcedType : (parsed.type || "article"),
+          category: forcedCat ? forcedCat : (parsed.category || "知識思考"),
+          summary: parsed.summary || rawInput,
+          takeaways: parsed.takeaways && parsed.takeaways.length ? parsed.takeaways : ["核心觀念已記錄於庫存中。"],
+          impact: parsed.impact || "在工作中實踐並檢視成效。",
+          tags: parsed.tags && parsed.tags.length ? parsed.tags : ["未標記"],
+          favorite: false,
+          date: new Date().toISOString().split("T")[0]
+        };
+
+        // Prepend new item
+        knowledgeItems.unshift(newItem);
+        persistKnowledge();
+
+        // Update UI
+        renderSidebarTaxonomy();
+        renderKnowledgeFeed();
+        showToast("已成功收納並自動分類！", "success");
+
+        // Trigger advisor auto-update in background
+        generateGrowthInsights(false);
+
+      } catch (err) {
+        console.error("Ingestion error:", err);
+        // Fallback: Add with basic info if AI fails
+        const fallbackItem = {
+          id: "k-" + Date.now(),
+          title: rawInput.slice(0, 45) || "手動收錄內容",
+          url: rawInput.startsWith("http") ? rawInput : "",
+          type: forcedType !== "auto" ? forcedType : (rawInput.startsWith("http") ? "link" : "note"),
+          category: forcedCat || "隨手筆記",
+          summary: userNotes || rawInput,
+          takeaways: ["此內容已由離線備援加入資料庫。"],
+          impact: "持續回顧並融入日常實踐。",
+          tags: ["快速收納"],
+          favorite: false,
+          date: new Date().toISOString().split("T")[0]
+        };
+        knowledgeItems.unshift(fallbackItem);
+        persistKnowledge();
+        renderSidebarTaxonomy();
+        renderKnowledgeFeed();
+        showToast("已以快速備存模式加入知識庫", "info");
+      } finally {
+        showProcessingBanner(false);
+      }
+    }
+
+    // AI Advisor: Synthesizes entire personal database to provide customized work & life advice
+    async function generateGrowthInsights(showNotification = false) {
+      const refreshBtn = document.getElementById("refresh-insights-btn");
+      if (refreshBtn) refreshBtn.classList.add("animate-spin");
+
+      // Extract brief metadata of current knowledge base
+      const knowledgeDigest = knowledgeItems.slice(0, 10).map((it, idx) => 
+        `[${idx+1}] 標題: ${it.title} | 分類: ${it.category} | 重點: ${(it.takeaways||[]).join("; ")} | 對工作人生影響: ${it.impact || ""}`
+      ).join("\n");
+
+      const prompt = `
+你是一位結合了查理·蒙格的多元思維、斯多葛學派心性以及矽谷頂級高管教練智慧的「個人終身成長顧問」。
+使用者目前的個人智慧資料庫累積了以下收錄內容：
+---
+${knowledgeDigest}
+---
+
+請綜觀以上使用者近期的閱讀軌跡與心智模型，撰寫一份專屬的「工作與人生進化建議」，包含：
+1. levelTitle: 依知識豐富度給予一個激勵人心的智識階段稱號（例如："LV.3 跨界連結期" 或 "LV.4 實踐複利期"）。
+2. brief: 一句精練有力的當前大腦狀態診斷（約30字）。
+3. workAdvice: 2 點具體可落地的「工作與執行力策略」（包含重要行動點，使用繁體中文）。
+4. lifeAdvice: 1~2 點滋養心靈與心智韌性的「人生與心態指引」。
+5. crossDomainInsight: 1 點發現他在不同分類領域之間的「奇妙連結」或可能存在的「思維盲點」。
+
+請回傳純 JSON 格式：
+{
+  "levelTitle": "string",
+  "brief": "string",
+  "workAdvice": ["建議1", "建議2"],
+  "lifeAdvice": ["指引1"],
+  "crossDomainInsight": "string"
+}
+`;
+
+      try {
+        const payload = {
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: {
+            responseMimeType: "application/json"
+          }
+        };
+
+        const response = await fetchWithRetry(getGeminiEndpoint(), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        
+        if (text) {
+          const res = JSON.parse(text);
+          if (res.levelTitle) document.getElementById("advisor-level").innerText = res.levelTitle;
+          if (res.brief) document.getElementById("advisor-brief").innerText = res.brief;
+
+          // Render work advice
+          if (Array.isArray(res.workAdvice)) {
+            document.getElementById("work-advice-body").innerHTML = res.workAdvice.map(a => 
+              `<p class="leading-relaxed"><strong class="text-slate-800">⚡ 建議：</strong>${escapeHtml(a)}</p>`
+            ).join("");
+          }
+
+          // Render life advice
+          if (Array.isArray(res.lifeAdvice)) {
+            document.getElementById("life-advice-body").innerHTML = res.lifeAdvice.map(a => 
+              `<p class="leading-relaxed"><strong class="text-slate-800">🌱 沉思：</strong>${escapeHtml(a)}</p>`
+            ).join("");
+          }
+
+          // Render cross domain
+          if (res.crossDomainInsight) {
+            document.getElementById("cross-advice-body").innerHTML = `
+              <p class="leading-relaxed">${escapeHtml(res.crossDomainInsight)}</p>
+            `;
+          }
+
+          if (showNotification) {
+            showToast("AI 教練已依據最新知識庫更新成長建議！", "success");
+          }
+        }
+      } catch (err) {
+        console.error("Advisor generation error:", err);
+        if (showNotification) {
+          showToast("更新建議暫時遇到阻礙，請稍後重試", "info");
+        }
+      } finally {
+        if (refreshBtn) refreshBtn.classList.remove("animate-spin");
+      }
+    }
+
+    // Direct Mentor Chat / Specific Query Prompt
+    async function askMentorCustomPrompt(customQuestion) {
+      showToast("AI 顧問正在綜觀你的筆記進行深度思考...", "info");
+
+      const titles = knowledgeItems.map(i => `《${i.title}》(${i.category})`).join("、");
+      const prompt = `
+使用者的資料庫目前收藏了：${titles}。
+使用者向你提問：「${customQuestion}」
+請根據他收藏的知識資產，給出 2 條具體、犀利且充滿智慧的實行指引。直接切入重點，語氣親切專業。
+`;
+
+      try {
+        const payload = {
+          contents: [{ parts: [{ text: prompt }] }]
+        };
+        const response = await fetchWithRetry(getGeminiEndpoint(), {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const data = await response.json();
+        const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (reply) {
+          // Open detail-like modal or show in advisor body
+          document.getElementById("work-advice-body").innerHTML = `
+            <div class="p-2.5 bg-brand-50 border border-brand-200 rounded-lg text-brand-900 mb-2 font-medium">
+              問：${escapeHtml(customQuestion)}
+            </div>
+            <div class="whitespace-pre-line text-slate-700">${escapeHtml(reply)}</div>
+          `;
+          showToast("AI 教練的回應已更新至右側「工作實踐」面板！", "success");
+        }
+      } catch (err) {
+        showToast("無法完成提問，請稍後重試", "error");
+      }
+    }
+
+    // Quick Ingest Handler
+    function handleQuickIngest() {
+      const input = document.getElementById("quick-input");
+      const val = input.value.trim();
+      if (!val) {
+        showToast("請輸入內容、文章標題或網址", "info");
+        return;
+      }
+      input.value = "";
+      ingestWithGemini(val);
+    }
+
+    // Modal Form Submit Handler
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const urlVal = document.getElementById("modal-url-input").value.trim();
+      const noteVal = document.getElementById("modal-text-input").value.trim();
+      const typeVal = document.getElementById("modal-type-select").value;
+      const catVal = document.getElementById("modal-cat-input").value.trim();
+
+      if (!urlVal) return;
+
+      closeModal("addModal");
+      document.getElementById("add-form").reset();
+      ingestWithGemini(urlVal, noteVal, typeVal, catVal);
+    }
+
+    // Search Handler
+    function handleSearch(val) {
+      searchQuery = val;
+      const clearBtn = document.getElementById("clear-search-btn");
+      if (val.trim()) {
+        clearBtn.classList.remove("hidden");
+      } else {
+        clearBtn.classList.add("hidden");
+      }
+      renderKnowledgeFeed();
+    }
+
+    function clearSearch() {
+      document.getElementById("search-input").value = "";
+      searchQuery = "";
+      document.getElementById("clear-search-btn").classList.add("hidden");
+      renderKnowledgeFeed();
+    }
+
+    // Filter Handlers
+    function setCategoryFilter(category) {
+      currentCategoryFilter = category;
+      updateFilterIndicator();
+      renderSidebarTaxonomy();
+      renderKnowledgeFeed();
+    }
+
+    function setFilter(type, kind) {
+      currentTypeFilter = type;
+      document.querySelectorAll(".filter-type-btn").forEach(btn => {
+        if (btn.getAttribute("data-type") === type) {
+          btn.classList.add("bg-brand-50", "text-brand-700", "font-semibold");
+          btn.classList.remove("text-slate-600", "hover:bg-slate-50");
+        } else {
+          btn.classList.remove("bg-brand-50", "text-brand-700", "font-semibold");
+          btn.classList.add("text-slate-600", "hover:bg-slate-50");
+        }
+      });
+      renderKnowledgeFeed();
+    }
+
+    function setMediaFilter(media) {
+      if (currentMediaFilter === media) {
+        currentMediaFilter = null; // Toggle off
+      } else {
+        currentMediaFilter = media;
+      }
+
+      document.querySelectorAll(".media-btn").forEach(btn => {
+        if (btn.getAttribute("data-media") === currentMediaFilter) {
+          btn.classList.add("bg-brand-500", "text-white", "border-brand-500");
+          btn.classList.remove("text-slate-600", "border-slate-200");
+        } else {
+          btn.classList.remove("bg-brand-500", "text-white", "border-brand-500");
+          btn.classList.add("text-slate-600", "border-slate-200");
+        }
+      });
+      renderKnowledgeFeed();
+    }
+
+    function setTagFilter(tag) {
+      if (currentTagFilter === tag) {
+        currentTagFilter = null;
+      } else {
+        currentTagFilter = tag;
+      }
+      updateFilterIndicator();
+      renderSidebarTaxonomy();
+      renderKnowledgeFeed();
+    }
+
+    function resetFilters() {
+      currentCategoryFilter = "all";
+      currentTypeFilter = "all";
+      currentMediaFilter = null;
+      currentTagFilter = null;
+      searchQuery = "";
+      document.getElementById("search-input").value = "";
+      document.getElementById("clear-search-btn").classList.add("hidden");
+
+      document.querySelectorAll(".media-btn").forEach(btn => {
+        btn.classList.remove("bg-brand-500", "text-white", "border-brand-500");
+        btn.classList.add("text-slate-600", "border-slate-200");
+      });
+
+      setFilter('all', 'type');
+      updateFilterIndicator();
+      renderSidebarTaxonomy();
+      renderKnowledgeFeed();
+    }
+
+    function updateFilterIndicator() {
+      const indicator = document.getElementById("active-filter-indicator");
+      const text = document.getElementById("active-filter-text");
+      const activeFilters = [];
+
+      if (currentCategoryFilter !== "all") activeFilters.push(`分類: ${currentCategoryFilter}`);
+      if (currentTagFilter) activeFilters.push(`標籤: #${currentTagFilter}`);
+
+      if (activeFilters.length > 0) {
+        text.innerText = activeFilters.join(" | ");
+        indicator.classList.remove("hidden");
+        indicator.classList.add("flex");
+      } else {
+        indicator.classList.add("hidden");
+        indicator.classList.remove("flex");
+      }
+    }
+
+    // Toggle Favorite
+    function toggleFavorite(id) {
+      const item = knowledgeItems.find(i => i.id === id);
+      if (item) {
+        item.favorite = !item.favorite;
+        persistKnowledge();
+        renderSidebarTaxonomy();
+        renderKnowledgeFeed();
+        showToast(item.favorite ? "已加入星標珍藏" : "已從星標珍藏移除", "info");
+      }
+    }
+
+    // Delete Item
+    function deleteItem(id) {
+      knowledgeItems = knowledgeItems.filter(i => i.id !== id);
+      persistKnowledge();
+      closeModal("detailModal");
+      renderSidebarTaxonomy();
+      renderKnowledgeFeed();
+      showToast("已從資料庫中移除該項目", "info");
+      generateGrowthInsights(false);
+    }
+
+    // Open Deep Detail Modal
+    function openItemDetail(id) {
+      const item = knowledgeItems.find(i => i.id === id);
+      if (!item) return;
+
+      document.getElementById("detail-title").innerText = item.title;
+      document.getElementById("detail-category").innerText = item.category;
+      document.getElementById("detail-date").innerText = item.date;
+      document.getElementById("detail-summary").innerText = item.summary;
+      document.getElementById("detail-badge-type").innerText = getTypeName(item.type);
+
+      // Takeaways
+      const takeawaysEl = document.getElementById("detail-takeaways");
+      takeawaysEl.innerHTML = (item.takeaways || []).map(t => `
+        <li class="flex items-start gap-2 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+          <i class="fa-solid fa-check text-brand-500 mt-1 shrink-0 text-xs"></i>
+          <span>${escapeHtml(t)}</span>
+        </li>
+      `).join("");
+
+      // Impact
+      document.getElementById("detail-impact").innerText = item.impact || "本篇精華能做為生活或工作執行時的重要參考框架。";
+
+      // Source URL
+      const sourceSec = document.getElementById("detail-source-section");
+      if (item.url) {
+        sourceSec.classList.remove("hidden");
+        document.getElementById("detail-source-url").innerText = item.url;
+        document.getElementById("detail-source-link").href = item.url;
+      } else {
+        sourceSec.classList.add("hidden");
+      }
+
+      // Tags
+      const tagsEl = document.getElementById("detail-tags");
+      tagsEl.innerHTML = (item.tags || []).map(t => `
+        <span class="text-xs px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 font-medium">#${escapeHtml(t)}</span>
+      `).join("");
+
+      // Delete button hook
+      document.getElementById("detail-delete-btn").onclick = () => deleteItem(item.id);
+
+      openModal("detailModal");
+    }
+
+    // Modal Controls
+    function openModal(id) {
+      document.getElementById(id).classList.remove("hidden");
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add("hidden");
+    }
+
+    function toggleMobilePanel(id) {
+      const el = document.getElementById(id);
+      el.classList.toggle("hidden");
+      if (!el.classList.contains("hidden")) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function showProcessingBanner(show) {
+      const banner = document.getElementById("ai-processing-card");
+      if (show) {
+        banner.classList.remove("hidden");
+      } else {
+        banner.classList.add("hidden");
+      }
+    }
+
+    // Settings & Standalone Helpers
+    function openSettingsModal() {
+      const existingKey = localStorage.getItem(STORAGE_KEY_API) || "";
+      document.getElementById("settings-api-key").value = existingKey;
+      openModal("settingsModal");
+    }
+
+    function saveSettings() {
+      const keyVal = document.getElementById("settings-api-key").value.trim();
+      if (keyVal) {
+        localStorage.setItem(STORAGE_KEY_API, keyVal);
+        showToast("API Key 設定已成功保存！", "success");
+      } else {
+        localStorage.removeItem(STORAGE_KEY_API);
+        showToast("已清除自訂 API Key", "info");
+      }
+      closeModal("settingsModal");
+    }
+
+    function exportDataToJson() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(knowledgeItems, null, 2));
+      const downloadAnchor = document.createElement("a");
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `synapse_backup_${new Date().toISOString().split("T")[0]}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      showToast("備份檔案已成功下載！", "success");
+    }
+
+    function importDataFromJson(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+          if (Array.isArray(parsed)) {
+            knowledgeItems = parsed;
+            persistKnowledge();
+            renderSidebarTaxonomy();
+            renderKnowledgeFeed();
+            closeModal("settingsModal");
+            showToast(`成功匯入 ${parsed.length} 筆知識！`, "success");
+            generateGrowthInsights(false);
+          } else {
+            showToast("JSON 格式不相符", "error");
+          }
+        } catch (err) {
+          showToast("解析備份檔案失敗，請檢查檔案格式", "error");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Helper: Toast Notifications
+    function showToast(message, type = "info") {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      
+      let icon = "fa-circle-info text-blue-500";
+      let border = "border-blue-200";
+      if (type === "success") {
+        icon = "fa-circle-check text-emerald-500";
+        border = "border-emerald-200";
+      } else if (type === "error") {
+        icon = "fa-triangle-exclamation text-rose-500";
+        border = "border-rose-200";
+      }
+
+      toast.className = `pointer-events-auto bg-white/95 backdrop-blur-md border ${border} shadow-lg rounded-2xl px-4 py-3 flex items-center gap-3 text-xs sm:text-sm text-slate-800 transition-all duration-300 transform translate-y-2 opacity-0`;
+      toast.innerHTML = `
+        <i class="fa-solid ${icon} text-base shrink-0"></i>
+        <span class="font-medium">${escapeHtml(message)}</span>
+      `;
+
+      container.appendChild(toast);
+      
+      requestAnimationFrame(() => {
+        toast.classList.remove("translate-y-2", "opacity-0");
+      });
+
+      setTimeout(() => {
+        toast.classList.add("opacity-0", "translate-y-2");
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // Utility Helpers
+    function getTypeIcon(type) {
+      switch (type) {
+        case "video": return '<i class="fa-brands fa-youtube text-red-500"></i>';
+        case "link": return '<i class="fa-solid fa-globe text-blue-500"></i>';
+        case "note": return '<i class="fa-solid fa-lightbulb text-amber-500"></i>';
+        default: return '<i class="fa-regular fa-newspaper text-indigo-500"></i>';
+      }
+    }
+
+    function getTypeName(type) {
+      switch (type) {
+        case "video": return "影音精華";
+        case "link": return "網頁連結";
+        case "note": return "隨手靈感";
+        default: return "深度專文";
+      }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return "";
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    // Exponential Backoff Fetch
+    async function fetchWithRetry(url, options, maxRetries = 3) {
+      let delay = 1000;
+      for (let i = 0; i < maxRetries; i++) {
+        try {
+          const res = await fetch(url, options);
+          if (res.ok) return res;
+          if (res.status === 429 && i < maxRetries - 1) {
+            await new Promise(r => setTimeout(r, delay));
+            delay *= 2;
+            continue;
+          }
+          return res;
+        } catch (err) {
+          if (i === maxRetries - 1) throw err;
+          await new Promise(r => setTimeout(r, delay));
+          delay *= 2;
+        }
+      }
+    }
+
+    // App Initialization on load
+    window.addEventListener("DOMContentLoaded", () => {
+      renderSidebarTaxonomy();
+      renderKnowledgeFeed();
+      // Generate initial growth insights based on seed database
+      generateGrowthInsights(false);
+    });
+  </script>
+</body>
+</html>
