@@ -198,7 +198,7 @@
           <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shrink-0">
             <i class="fa-solid fa-bolt-lightning"></i>
           </div>
-          <input id="quick-input" type="text" placeholder="貼上新聞文章、YouTube、Shorts、IG 連結或直接貼上內文..." 
+          <input id="quick-input" type="text" placeholder="貼上新聞文章、YouTube、Shorts、IG 連結或直接輸入想法..." 
             class="w-full bg-transparent border-0 text-xs sm:text-sm focus:outline-none placeholder:text-slate-400"
             onkeydown="if(event.key === 'Enter') handleQuickIngest()"
           />
@@ -251,9 +251,9 @@
           </div>
           <div class="flex-1 min-w-0">
             <h4 class="text-xs font-bold text-slate-800 flex items-center gap-1.5 truncate">
-              <span id="ai-processing-title">正在連線穿透擷取文章正文...</span>
+              <span id="ai-processing-title">正在連線穿透擷取內容...</span>
             </h4>
-            <p id="ai-processing-sub" class="animate-subtle text-brand-600 text-[11px] truncate mt-0.5">取得真實新聞標題與段落中...</p>
+            <p id="ai-processing-sub" class="animate-subtle text-brand-600 text-[11px] truncate mt-0.5">取得文章正文與精華結構中...</p>
             <div class="w-full bg-slate-200/80 rounded-full h-1.5 mt-2 overflow-hidden">
               <div class="bg-gradient-to-r from-brand-500 via-pink-500 to-purple-500 h-1.5 rounded-full w-2/3 animate-pulse"></div>
             </div>
@@ -290,7 +290,7 @@
             <p class="text-[10px] text-slate-500">與知識庫同步進化的智慧顧問</p>
           </div>
         </div>
-        <button onclick="generateGrowthInsights(true)" id="refresh-insights-btn" title="綜觀整個知識庫重新生成洞察" class="p-1.5 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition">
+        <button onclick="generateGrowthInsights(true)" id="refresh-insights-btn" title="手動重新生成成長洞察" class="p-1.5 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition">
           <i class="fa-solid fa-arrows-rotate text-xs"></i>
         </button>
       </div>
@@ -307,7 +307,7 @@
           <span id="advisor-item-count" class="text-[10px] text-indigo-700 bg-white/80 px-1.5 py-0.5 rounded font-semibold border border-indigo-200/50">已整合知識</span>
         </div>
         <p class="text-[11px] text-indigo-800/80 leading-relaxed" id="advisor-brief">
-          正在從你的新聞閱讀、行銷商業與思維筆記中抽絲剝繭，提煉可實踐的成長藍圖。
+          正在從你的閱讀與思考筆記中抽絲剝繭，提煉可實踐的成長藍圖。
         </p>
       </div>
 
@@ -318,7 +318,7 @@
             <span>🎯 工作實踐與效能推進</span>
           </div>
           <div id="work-advice-body" class="text-xs text-slate-600 leading-relaxed space-y-2">
-            <p>💡 <strong class="text-slate-800">創新品牌聯想：</strong>將商業命名與幽默記憶點融入專案設計，創造直擊人心的記憶槓桿。</p>
+            <p>💡 <strong class="text-slate-800">落實SOP：</strong>將意外事故防範與流程檢查列為每日例行標準。</p>
           </div>
         </div>
 
@@ -328,7 +328,7 @@
             <span>🌱 人生哲學與心智修煉</span>
           </div>
           <div id="life-advice-body" class="text-xs text-slate-600 leading-relaxed space-y-2">
-            <p>🧘 <strong class="text-slate-800">保持好奇童心：</strong>從看似荒謬的歷史趣談中，提煉出打破常規思考的勇氣。</p>
+            <p>🧘 <strong class="text-slate-800">居安思危：</strong>面對變數始終保持謹慎與謙卑，以最小的謹慎避免最大的遺憾。</p>
           </div>
         </div>
 
@@ -338,7 +338,7 @@
             <span>🧩 跨領域思維連結</span>
           </div>
           <div id="cross-advice-body" class="text-xs text-slate-600 leading-relaxed">
-            <p>運動行銷與傳統民生用品的結合，證明商業世界永遠需要跨界想像力。</p>
+            <p>工安警覺與商業品牌經營，都需要深層的風險控制與制度設計。</p>
           </div>
         </div>
       </div>
@@ -560,7 +560,7 @@
           <div id="test-key-status" class="hidden mt-2 p-2.5 rounded-lg text-xs leading-relaxed border"></div>
 
           <p class="text-[10px] text-slate-500 mt-2.5 leading-relaxed bg-white/70 p-2 rounded-lg border border-indigo-100">
-            💡 <strong>金鑰防護</strong>：已啟用「LocalStorage + Cookie + IndexedDB」三重安全防護。系統會動態獲取 Google 帳號可用之最新 Flash 模型。
+            💡 <strong>高額度防護</strong>：系統已預設選用每天具備 1,500 次免費額度之 <code>gemini-2.0-flash</code> 系列，並內建「自動跨模型跳轉」機制。
           </p>
         </div>
 
@@ -586,16 +586,6 @@
             </label>
           </div>
         </div>
-
-        <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-          <div>
-            <span class="text-xs font-bold text-slate-700 block">清除初始示範筆記</span>
-            <span class="text-[11px] text-slate-400">刪除系統內建的示範卡片，保留乾淨大腦</span>
-          </div>
-          <button onclick="clearDemoItems()" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl text-xs font-semibold border border-rose-200 transition">
-            <i class="fa-regular fa-trash-can mr-1"></i> 清除範例
-          </button>
-        </div>
       </div>
 
       <div class="pt-4 mt-5 border-t border-slate-100 flex items-center justify-end gap-2.5">
@@ -619,7 +609,14 @@
     const STORE_NAME = "app_config";
 
     let cachedApiKey = "";
-    let cachedActiveModel = "";
+    // High-quota models prioritized: gemini-2.0-flash has 1,500 free requests per day
+    const HIGH_QUOTA_MODELS = [
+      "gemini-2.0-flash",
+      "gemini-2.0-flash-lite",
+      "gemini-1.5-flash-latest",
+      "gemini-2.5-flash-lite",
+      "gemini-2.5-flash"
+    ];
 
     function initIndexedDB() {
       return new Promise((resolve) => {
@@ -687,60 +684,6 @@
       return str.trim().replace(/["']/g, '');
     }
 
-    // Dynamic Discovery of Available Models directly from Google
-    async function discoverValidGeminiModel(apiKey) {
-      if (cachedActiveModel) return cachedActiveModel;
-      if (!apiKey) return "gemini-2.5-flash";
-
-      try {
-        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data && Array.isArray(data.models)) {
-            const supported = data.models.filter(m => 
-              Array.isArray(m.supportedGenerationMethods) && 
-              m.supportedGenerationMethods.includes("generateContent")
-            ).map(m => m.name.replace("models/", ""));
-
-            // Preferred order
-            const priorityList = [
-              "gemini-2.5-flash",
-              "gemini-2.0-flash",
-              "gemini-3-flash-preview",
-              "gemini-flash-latest",
-              "gemini-2.5-flash-lite",
-              "gemini-2.0-flash-lite",
-              "gemini-1.5-flash-002",
-              "gemini-1.5-pro-002"
-            ];
-
-            for (const p of priorityList) {
-              if (supported.includes(p)) {
-                cachedActiveModel = p;
-                return p;
-              }
-            }
-
-            const anyFlash = supported.find(n => n.includes("flash"));
-            if (anyFlash) {
-              cachedActiveModel = anyFlash;
-              return anyFlash;
-            }
-
-            if (supported.length > 0) {
-              cachedActiveModel = supported[0];
-              return supported[0];
-            }
-          }
-        }
-      } catch (e) {
-        console.warn("Could not list models:", e);
-      }
-
-      cachedActiveModel = "gemini-2.5-flash";
-      return "gemini-2.5-flash";
-    }
-
     async function resolveApiKeyOnBoot() {
       try {
         const params = new URLSearchParams(window.location.search);
@@ -753,7 +696,6 @@
             window.history.replaceState({}, document.title, cleanUrl);
             showToast("🔑 已成功從專屬連結自動套用 API Key！", "success");
             checkApiKeyStatus();
-            discoverValidGeminiModel(clean);
             return clean;
           }
         }
@@ -784,22 +726,17 @@
 
       cachedApiKey = extractCleanApiKey(key);
       checkApiKeyStatus();
-      if (cachedApiKey) {
-        discoverValidGeminiModel(cachedApiKey);
-      }
       return cachedApiKey;
     }
 
     async function persistApiKey(rawKey) {
       const cleanKey = extractCleanApiKey(rawKey);
       cachedApiKey = cleanKey;
-      cachedActiveModel = "";
 
       if (cleanKey) {
         try { localStorage.setItem(STORAGE_KEY_API, cleanKey); } catch (e) {}
         setPersistentCookie(STORAGE_KEY_API, cleanKey, 365);
         await setIDB(STORAGE_KEY_API, cleanKey);
-        discoverValidGeminiModel(cleanKey);
       } else {
         try { localStorage.removeItem(STORAGE_KEY_API); } catch (e) {}
         setPersistentCookie(STORAGE_KEY_API, "", -1);
@@ -836,34 +773,12 @@
       }
     }
 
-    // Default Initial Data
-    const defaultInitialItems = [
-      {
-        id: "k-yt-1",
-        title: "如何建立持續進步的微習慣：原子習慣的核心精華解讀",
-        url: "https://www.youtube.com/watch?v=mNeXuUt4pNs",
-        type: "youtube",
-        category: "個人成長與習慣",
-        summary: "專注於身分認同的轉變，而非單純的目標設定。每天進步 1%，一年後將帶來 37 倍的複利成長。",
-        takeaways: [
-          "提示、渴望、回應、獎賞是所有習慣養成的四大迴路。",
-          "讓好習慣顯而易見、有吸引力、輕而易舉、令人滿足。",
-          "不要中斷兩次：錯過一次是意外，錯過兩次就是新習慣的開始。"
-        ],
-        impact: "在日常工作中將大型任務拆解為 2 分鐘微行動，克服拖延阻力。",
-        tags: ["原子習慣", "微習慣", "行為設計"],
-        thumbnail: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=600&auto=format&fit=crop&q=80",
-        favorite: true,
-        date: "2026-10-17"
-      }
-    ];
-
     let knowledgeItems = [];
     try {
       const stored = localStorage.getItem(STORAGE_ITEMS_KEY);
-      knowledgeItems = stored ? JSON.parse(stored) : defaultInitialItems;
+      knowledgeItems = stored ? JSON.parse(stored) : [];
     } catch (e) {
-      knowledgeItems = defaultInitialItems;
+      knowledgeItems = [];
     }
 
     function persistKnowledge() {
@@ -1010,14 +925,14 @@
           </span>
         `).join("");
 
-        const isFallback = (item.takeaways && item.takeaways[0] && (item.takeaways[0].includes("離線備援") || item.takeaways[0].includes("not found")));
+        const isFallback = (item.takeaways && item.takeaways[0] && (item.takeaways[0].includes("離線備援") || item.takeaways[0].includes("Quota exceeded")));
 
         const thumbnailHtml = item.thumbnail ? `
           <div class="relative w-full h-36 sm:h-44 rounded-xl overflow-hidden mb-3 bg-slate-900 group/thumb">
             <img src="${escapeHtml(item.thumbnail)}" alt="Thumbnail" class="w-full h-full object-cover opacity-90 group-hover/thumb:opacity-100 transition">
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-2.5">
               <span class="text-[11px] text-white/90 font-medium flex items-center gap-1.5">
-                <i class="fa-solid fa-play text-red-500"></i> 點擊播放 / 查閱詳情
+                <i class="fa-solid fa-play text-red-500"></i> 點擊查閱詳情
               </span>
             </div>
           </div>
@@ -1078,8 +993,27 @@
     }
 
     // ----------------------------------------------------
-    // ROBUST WEBPAGE & MEDIA EXTRACTION ENGINE
+    // URL CLEANER & SCRAPER ENGINE
     // ----------------------------------------------------
+    function sanitizeCleanUrl(url) {
+      if (!url) return "";
+      try {
+        const u = new URL(url);
+        // Clean out tracking query params (rpxt, utm, igsh, etc.)
+        const paramsToKeep = ['v']; // Keep youtube video param
+        const newSearchParams = new URLSearchParams();
+        for (const [k, v] of u.searchParams.entries()) {
+          if (paramsToKeep.includes(k)) {
+            newSearchParams.set(k, v);
+          }
+        }
+        u.search = newSearchParams.toString();
+        return u.toString();
+      } catch (e) {
+        return url.split('?')[0]; // simple fallback
+      }
+    }
+
     function parseHtmlMetadata(htmlString) {
       if (!htmlString || typeof htmlString !== 'string') return null;
       try {
@@ -1093,7 +1027,7 @@
                     || "";
         
         let cleanTitle = rawTitle.trim();
-        cleanTitle = cleanTitle.replace(/\s*[-|_|–|—]\s*(TVBS 新聞網|TVBS|聯合新聞網|報時光|聯合報|udn|Yahoo奇摩|ETtoday|商業周刊|天下雜誌|遠見雜誌).*$/i, '').trim();
+        cleanTitle = cleanTitle.replace(/\s*[-|_|–|—]\s*(TVBS 新聞網|TVBS|聯合新聞網|報時光|聯合報|udn|Yahoo奇摩|ETtoday|Instagram).*$/i, '').trim();
 
         let rawDesc = doc.querySelector('meta[property="og:description"]')?.getAttribute('content')
                    || doc.querySelector('meta[name="description"]')?.getAttribute('content')
@@ -1127,12 +1061,13 @@
 
     async function fetchWebpageContent(url) {
       if (!url || !url.startsWith("http")) return null;
+      const cleanTargetUrl = sanitizeCleanUrl(url);
 
       // Pipeline 1: Jina Reader with timeout & accept headers
       try {
         const controller = new AbortController();
         const tid = setTimeout(() => controller.abort(), 6000);
-        const res = await fetch(`https://r.jina.ai/${url}`, {
+        const res = await fetch(`https://r.jina.ai/${cleanTargetUrl}`, {
           signal: controller.signal,
           headers: { 
             'Accept': 'text/plain',
@@ -1145,7 +1080,7 @@
           if (text && text.length > 100 && !text.includes("403 Forbidden") && !text.includes("Cloudflare")) {
             const titleMatch = text.match(/(?:Title:\s*|#\s*)([^\n]+)/i);
             let extractedTitle = titleMatch ? titleMatch[1].trim() : "";
-            extractedTitle = extractedTitle.replace(/\s*[-|_|–|—]\s*(TVBS 新聞網|TVBS|聯合新聞網|報時光|聯合報|udn).*$/i, '').trim();
+            extractedTitle = extractedTitle.replace(/\s*[-|_|–|—]\s*(TVBS 新聞網|TVBS|聯合新聞網|報時光|聯合報|udn|Instagram).*$/i, '').trim();
 
             return {
               title: extractedTitle,
@@ -1158,11 +1093,11 @@
         console.warn("Jina Reader timeout or error:", e);
       }
 
-      // Pipeline 2: AllOrigins raw & JSON fallback
+      // Pipeline 2: AllOrigins proxy
       try {
         const controller = new AbortController();
         const tid = setTimeout(() => controller.abort(), 5000);
-        const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`, {
+        const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(cleanTargetUrl)}`, {
           signal: controller.signal
         });
         clearTimeout(tid);
@@ -1181,7 +1116,7 @@
       try {
         const controller = new AbortController();
         const tid = setTimeout(() => controller.abort(), 4500);
-        const res = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`, {
+        const res = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(cleanTargetUrl)}`, {
           signal: controller.signal
         });
         clearTimeout(tid);
@@ -1244,7 +1179,59 @@
     }
 
     // ----------------------------------------------------
-    // CORE GEMINI INGESTION ENGINE (ERROR-PROOF)
+    // ROBUST GEMINI CALLER WITH AUTO-MODEL FAILOVER (QUOTA SHIELD)
+    // ----------------------------------------------------
+    async function executeGeminiPromptWithFailover(prompt, apiKey) {
+      let lastErrorMessage = "";
+
+      for (const model of HIGH_QUOTA_MODELS) {
+        try {
+          const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+          const payload = {
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: {
+              temperature: 0.2,
+              responseMimeType: "application/json"
+            }
+          };
+
+          const response = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (responseText) {
+              return { text: responseText, modelUsed: model };
+            }
+          } else {
+            const errData = await response.json().catch(() => ({}));
+            const errMsg = errData?.error?.message || `HTTP ${response.status}`;
+            lastErrorMessage = errMsg;
+
+            // If quota exceeded or model not found, try the NEXT high-quota model immediately
+            if (response.status === 429 || errMsg.includes("Quota exceeded") || errMsg.includes("not found")) {
+              console.warn(`Model ${model} unavailable (${errMsg}), auto-switching to next model...`);
+              continue; // try next candidate in HIGH_QUOTA_MODELS
+            } else {
+              throw new Error(errMsg);
+            }
+          }
+        } catch (err) {
+          lastErrorMessage = err.message;
+          console.warn(`Error on model ${model}:`, err.message);
+          continue;
+        }
+      }
+
+      throw new Error(lastErrorMessage || "所有可用 AI 模型額度均暫時受限，請稍候重試");
+    }
+
+    // ----------------------------------------------------
+    // CORE INGESTION ENGINE
     // ----------------------------------------------------
     async function ingestWithGemini(rawInput, userNotes = "", forcedType = "auto", forcedCat = "", targetItemId = null) {
       const apiKey = getActiveApiKey();
@@ -1266,47 +1253,25 @@
       const isUrl = inputUrl.startsWith("http://") || inputUrl.startsWith("https://");
 
       if (!apiKey) {
-        showToast("尚未設定 API Key！已為您備存，請點右上角 ⚙️ 填入 Key", "error");
+        showToast("尚未設定 API Key！請點右上角 ⚙️ 填入 Key", "error");
         openSettingsModal();
-
-        if (!targetItemId) {
-          const ytId = extractYouTubeVideoId(inputUrl);
-          const fallbackType = ytId ? (inputUrl.includes("/shorts/") ? "shorts" : "youtube") : (isInstagramUrl(inputUrl) ? "instagram" : (isUrl ? "article" : "note"));
-          const fallbackItem = {
-            id: "k-" + Date.now(),
-            title: isUrl ? inputUrl.slice(0, 60) : "隨手筆記",
-            url: isUrl ? inputUrl : "",
-            type: forcedType !== "auto" ? forcedType : fallbackType,
-            category: forcedCat || "隨手筆記",
-            summary: inputNotes || inputUrl,
-            takeaways: ["此內容已由離線備援加入資料庫。設定 API Key 後點「重新解析」即可讓 AI 分析！"],
-            impact: "持續回顧並融入日常實踐。",
-            tags: ["快速收納"],
-            thumbnail: ytId ? `https://img.youtube.com/vi/${ytId}/hqdefault.jpg` : "",
-            favorite: false,
-            date: new Date().toISOString().split("T")[0]
-          };
-          knowledgeItems.unshift(fallbackItem);
-          persistKnowledge();
-          renderSidebarTaxonomy();
-          renderKnowledgeFeed();
-        }
         return;
       }
 
       showProcessingBanner(true);
       
-      const ytId = extractYouTubeVideoId(inputUrl);
-      const isIg = isInstagramUrl(inputUrl);
+      const cleanUrl = isUrl ? sanitizeCleanUrl(inputUrl) : "";
+      const ytId = extractYouTubeVideoId(cleanUrl);
+      const isIg = isInstagramUrl(cleanUrl);
       let detectedType = isUrl ? "article" : "note";
       let fetchedTitle = "";
       let fetchedContent = "";
       let mediaThumbnail = "";
 
       if (ytId) {
-        detectedType = inputUrl.includes("/shorts/") ? "shorts" : "youtube";
+        detectedType = cleanUrl.includes("/shorts/") ? "shorts" : "youtube";
         updateProcessingStatus("正在提取 YouTube 官方影片資訊與縮圖...", "獲取影片標題、頻道作者與內容精華");
-        const ytMeta = await fetchYouTubeMetadata(ytId, inputUrl);
+        const ytMeta = await fetchYouTubeMetadata(ytId, cleanUrl);
         if (ytMeta.title) fetchedTitle = ytMeta.title;
         if (ytMeta.thumbnail) mediaThumbnail = ytMeta.thumbnail;
         
@@ -1314,8 +1279,8 @@
         if (webData && webData.content) fetchedContent = webData.content;
       } else if (isIg) {
         detectedType = "instagram";
-        updateProcessingStatus("正在萃取 Instagram Reels / 貼文重點...", "解析社群影音的核心論點與金句");
-        const webData = await fetchWebpageContent(inputUrl);
+        updateProcessingStatus("正在萃取 Instagram Reels / 貼文重點...", "解析社群影音的核心論點與文字精華");
+        const webData = await fetchWebpageContent(cleanUrl);
         if (webData) {
           if (webData.title) fetchedTitle = webData.title;
           if (webData.content) fetchedContent = webData.content;
@@ -1323,14 +1288,14 @@
       } else if (isUrl) {
         detectedType = "article";
         updateProcessingStatus("正在穿透擷取新聞網頁正文...", "連線來源網站讀取真實標題與新聞段落");
-        const webData = await fetchWebpageContent(inputUrl);
+        const webData = await fetchWebpageContent(cleanUrl);
         if (webData) {
           if (webData.title) fetchedTitle = webData.title;
           if (webData.content || webData.description) {
             fetchedContent = (webData.description ? `【重點大綱】：${webData.description}\n` : '') + (webData.content || '');
           }
           if (fetchedTitle) {
-            updateProcessingStatus(`已成功讀取：《${fetchedTitle.slice(0, 18)}...》`, "Gemini AI 正在深度研讀與分類提煉中...");
+            updateProcessingStatus(`已成功讀取：《${fetchedTitle.slice(0, 18)}...》`, "AI 正在分析歸納並提煉精華重點...");
           }
         }
       } else {
@@ -1338,10 +1303,9 @@
         updateProcessingStatus("Gemini AI 正在深入剖析個人隨筆與靈感...", "歸納概念結構與人生建議");
       }
 
-      // If scraping failed to get text for URL, extract domain/hints
       let sourceDomain = "";
       if (isUrl) {
-        try { sourceDomain = new URL(inputUrl).hostname; } catch(e){}
+        try { sourceDomain = new URL(cleanUrl).hostname; } catch(e){}
       }
 
       const existingCategories = Object.keys(getCategoriesStats());
@@ -1349,7 +1313,7 @@
 你是一位頂級的個人知識工程師與思想教練。請分析以下使用者提供的影音、短片、貼文或文章內容，精確提煉出核心重點。
 
 【內容來源資料】：
-來源網址：${inputUrl || "（純文字隨筆）"}
+來源網址：${cleanUrl || "（純文字隨筆）"}
 網址來源網域：${sourceDomain}
 媒體類型識別：${detectedType}
 ${fetchedTitle ? `【真實抓取標題】：${fetchedTitle}\n` : ''}
@@ -1363,13 +1327,13 @@ ${fetchedContent ? `【真實抓取內文 / 摘要】：\n${fetchedContent}\n` :
 【重要規範（嚴格遵守）】：
 1. 標題 (title)：
    - 若已有【真實抓取標題】，請依據真實標題精煉為吸引人的繁體中文標題。
-   - 若沒有抓到內文，請根據網址中的關鍵資訊與使用者補充，推導出最適切的中文標題，絕不可胡亂張冠李戴。
+   - 若未抓到完整內文，請依據來源網址與關鍵資訊推導出最適切的中文標題，絕不可胡亂張冠李戴。
 2. type: "${forcedType !== 'auto' ? forcedType : detectedType}"
 3. category: 核心分類名稱（例如："商業思維與行銷"、"社會觀察與時事"、"工作心智與效率"、"個人成長與習慣"、"科技與未來"、"生活哲學" 等）。若符合現有分類請優先復用。
 4. summary: 2~3 句清晰流暢的核心重點摘要。
 5. takeaways: 2~3 條具體、實操性強的精華重點清單（繁體中文陣列）。
 6. impact: 1 句精闢指引，點出這篇內容對個人的「工作行動」或「人生思維」能帶來何種啟發。
-7. tags: 3~4 個關鍵標籤陣列（如："#時事觀察"、"#品牌行銷"）。
+7. tags: 3~4 個關鍵標籤陣列（如："#品牌行銷"、"#時事觀察"）。
 
 請直接以純 JSON 格式回傳，格式如下：
 {
@@ -1384,34 +1348,7 @@ ${fetchedContent ? `【真實抓取內文 / 摘要】：\n${fetchedContent}\n` :
 `;
 
       try {
-        // Automatically determine the active available model to prevent 404
-        const activeModel = await discoverValidGeminiModel(apiKey);
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${activeModel}:generateContent?key=${apiKey}`;
-
-        const payload = {
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: {
-            temperature: 0.2,
-            responseMimeType: "application/json"
-          }
-        };
-
-        const response = await fetchWithRetry(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        if (!response.ok) {
-          const errData = await response.json().catch(() => ({}));
-          const errMsg = errData?.error?.message || `HTTP ${response.status}`;
-          throw new Error(errMsg);
-        }
-
-        const data = await response.json();
-        const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
-        if (!responseText) throw new Error("AI 回應為空");
+        const { text: responseText, modelUsed } = await executeGeminiPromptWithFailover(prompt, apiKey);
 
         let parsed;
         try {
@@ -1427,11 +1364,11 @@ ${fetchedContent ? `【真實抓取內文 / 摘要】：\n${fetchedContent}\n` :
 
         const resolvedItem = {
           id: targetItemId || ("k-" + Date.now()),
-          title: parsed.title || fetchedTitle || inputUrl.slice(0, 50),
-          url: isUrl ? inputUrl : "",
+          title: parsed.title || fetchedTitle || cleanUrl.slice(0, 50),
+          url: isUrl ? cleanUrl : "",
           type: finalType,
           category: forcedCat ? forcedCat : (parsed.category || "隨手筆記"),
-          summary: parsed.summary || inputNotes || inputUrl,
+          summary: parsed.summary || inputNotes || cleanUrl,
           takeaways: (parsed.takeaways && parsed.takeaways.length) ? parsed.takeaways : ["核心觀念已記錄於庫存中。"],
           impact: parsed.impact || "在生活中實踐並檢視成效。",
           tags: (parsed.tags && parsed.tags.length) ? parsed.tags : [finalType],
@@ -1457,20 +1394,18 @@ ${fetchedContent ? `【真實抓取內文 / 摘要】：\n${fetchedContent}\n` :
 
         if (targetItemId) openItemDetail(targetItemId);
 
-        generateGrowthInsights(false);
-
       } catch (err) {
         console.error("Ingestion error:", err);
-        showToast(`AI 解析失敗: ${err.message}`, "error");
+        showToast(`AI 解析受限: ${err.message}`, "error");
 
         if (!targetItemId) {
           const fallbackItem = {
             id: "k-" + Date.now(),
-            title: fetchedTitle || (isUrl ? inputUrl.slice(0, 50) : "隨手筆記"),
-            url: isUrl ? inputUrl : "",
+            title: fetchedTitle || (isUrl ? cleanUrl.slice(0, 50) : "隨手筆記"),
+            url: isUrl ? cleanUrl : "",
             type: forcedType !== "auto" ? forcedType : detectedType,
             category: forcedCat || "隨手筆記",
-            summary: inputNotes || inputUrl,
+            summary: inputNotes || cleanUrl,
             takeaways: [`此內容已由離線備援加入資料庫。(${err.message || '待重新解析'})`],
             impact: "持續回顧並融入日常實踐。",
             tags: ["快速收納"],
@@ -1488,19 +1423,11 @@ ${fetchedContent ? `【真實抓取內文 / 摘要】：\n${fetchedContent}\n` :
       }
     }
 
-    function clearDemoItems() {
-      knowledgeItems = knowledgeItems.filter(i => !["k-yt-1", "k-ig-1", "k-yt-2", "k-1", "k-2", "k-3"].includes(i.id));
-      persistKnowledge();
-      renderSidebarTaxonomy();
-      renderKnowledgeFeed();
-      closeModal("settingsModal");
-      showToast("已成功清除所有預設示範卡片！", "success");
-    }
-
-    // AI Advisor
+    // AI Advisor (manual trigger only to preserve free quota)
     async function generateGrowthInsights(showNotification = false) {
       const apiKey = getActiveApiKey();
       if (!apiKey) return;
+      if (knowledgeItems.length === 0) return;
 
       const refreshBtn = document.getElementById("refresh-insights-btn");
       if (refreshBtn) refreshBtn.classList.add("animate-spin");
@@ -1527,26 +1454,9 @@ ${knowledgeDigest}
 `;
 
       try {
-        const activeModel = await discoverValidGeminiModel(apiKey);
-        const payload = {
-          contents: [{ parts: [{ text: prompt }] }],
-          generationConfig: { responseMimeType: "application/json" }
-        };
-
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${activeModel}:generateContent?key=${apiKey}`;
-        const response = await fetchWithRetry(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-
-        if (!response.ok) return;
-
-        const data = await response.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        
-        if (text) {
-          const cleanText = text.replace(/```(?:json)?/gi, '').replace(/```/g, '').trim();
+        const { text: responseText } = await executeGeminiPromptWithFailover(prompt, apiKey);
+        if (responseText) {
+          const cleanText = responseText.replace(/```(?:json)?/gi, '').replace(/```/g, '').trim();
           const jsonMatch = cleanText.match(/\{[\s\S]*\}/);
           const res = jsonMatch ? JSON.parse(jsonMatch[0]) : JSON.parse(cleanText);
 
@@ -1598,17 +1508,7 @@ ${knowledgeDigest}
 `;
 
       try {
-        const activeModel = await discoverValidGeminiModel(apiKey);
-        const payload = { contents: [{ parts: [{ text: prompt }] }] };
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${activeModel}:generateContent?key=${apiKey}`;
-        const response = await fetchWithRetry(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        const data = await response.json();
-        const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
-
+        const { text: reply } = await executeGeminiPromptWithFailover(prompt, apiKey);
         if (reply) {
           document.getElementById("work-advice-body").innerHTML = `
             <div class="p-2.5 bg-brand-50 border border-brand-200 rounded-lg text-brand-900 mb-2 font-medium">
@@ -1764,7 +1664,6 @@ ${knowledgeDigest}
       renderSidebarTaxonomy();
       renderKnowledgeFeed();
       showToast("已從資料庫中移除該項目", "info");
-      generateGrowthInsights(false);
     }
 
     function openItemDetail(id) {
@@ -1884,7 +1783,6 @@ ${knowledgeDigest}
       }
 
       closeModal("settingsModal");
-      generateGrowthInsights(false);
     }
 
     async function testApiKeyConnection() {
@@ -1900,32 +1798,18 @@ ${knowledgeDigest}
       }
 
       testStatusEl.className = "mt-2 p-2.5 rounded-lg text-xs leading-relaxed border bg-indigo-50 border-indigo-200 text-indigo-700";
-      testStatusEl.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-1"></i> 正在連線 Google 伺服器驗證金鑰與可用模型...`;
+      testStatusEl.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-1"></i> 正在連線 Google 伺服器驗證金鑰與高額度模型...`;
       testStatusEl.classList.remove("hidden");
 
       try {
-        const detectedModel = await discoverValidGeminiModel(keyToTest);
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${detectedModel}:generateContent?key=${keyToTest}`;
-        const res = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ contents: [{ parts: [{ text: "ping" }] }] })
-        });
-
-        if (res.ok) {
-          testStatusEl.className = "mt-2 p-2.5 rounded-lg text-xs leading-relaxed border bg-emerald-50 border-emerald-200 text-emerald-800 font-semibold";
-          testStatusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> 連線成功！已自動適配模型：${escapeHtml(detectedModel)}`;
-          await persistApiKey(keyToTest);
-          updateSettingsModalUI();
-        } else {
-          const errData = await res.json().catch(() => ({}));
-          const errMsg = errData?.error?.message || `HTTP ${res.status}`;
-          testStatusEl.className = "mt-2 p-2.5 rounded-lg text-xs leading-relaxed border bg-rose-50 border-rose-200 text-rose-700";
-          testStatusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> 驗證未通過 (${errMsg})，請確認金鑰是否完整複製。`;
-        }
+        const { modelUsed } = await executeGeminiPromptWithFailover(`{"ping":"pong"}`, keyToTest);
+        testStatusEl.className = "mt-2 p-2.5 rounded-lg text-xs leading-relaxed border bg-emerald-50 border-emerald-200 text-emerald-800 font-semibold";
+        testStatusEl.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> 連線成功！已自動配接高額度模型：${escapeHtml(modelUsed)} (每日最高 1,500 次)`;
+        await persistApiKey(keyToTest);
+        updateSettingsModalUI();
       } catch (err) {
         testStatusEl.className = "mt-2 p-2.5 rounded-lg text-xs leading-relaxed border bg-rose-50 border-rose-200 text-rose-700";
-        testStatusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> 連線超時或網路失敗：${escapeHtml(err.message)}`;
+        testStatusEl.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> 驗證未通過 (${escapeHtml(err.message)})`;
       }
     }
 
@@ -1971,7 +1855,6 @@ ${knowledgeDigest}
             renderKnowledgeFeed();
             closeModal("settingsModal");
             showToast(`成功匯入 ${parsed.length} 筆知識！`, "success");
-            generateGrowthInsights(false);
           } else {
             showToast("JSON 格式不相符", "error");
           }
@@ -2057,31 +1940,10 @@ ${knowledgeDigest}
         .replace(/'/g, "&#039;");
     }
 
-    async function fetchWithRetry(url, options, maxRetries = 3) {
-      let delay = 1000;
-      for (let i = 0; i < maxRetries; i++) {
-        try {
-          const res = await fetch(url, options);
-          if (res.ok) return res;
-          if (res.status === 429 && i < maxRetries - 1) {
-            await new Promise(r => setTimeout(r, delay));
-            delay *= 2;
-            continue;
-          }
-          return res;
-        } catch (err) {
-          if (i === maxRetries - 1) throw err;
-          await new Promise(r => setTimeout(r, delay));
-          delay *= 2;
-        }
-      }
-    }
-
     window.addEventListener("DOMContentLoaded", async () => {
       await resolveApiKeyOnBoot();
       renderSidebarTaxonomy();
       renderKnowledgeFeed();
-      generateGrowthInsights(false);
     });
   </script>
 </body>
