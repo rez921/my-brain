@@ -769,12 +769,16 @@
             const cleanUrl = window.location.origin + window.location.pathname + window.location.hash;
             window.history.replaceState({}, document.title, cleanUrl);
             showToast("🔑 已成功從專屬連結自動套用 API Key！", "success");
+            checkApiKeyStatus();
             return clean;
           }
         }
       } catch (e) {}
 
-      if (cachedApiKey) return cachedApiKey;
+      if (cachedApiKey) {
+        checkApiKeyStatus();
+        return cachedApiKey;
+      }
 
       let key = "";
       try {
@@ -797,6 +801,7 @@
       }
 
       cachedApiKey = extractCleanApiKey(key);
+      checkApiKeyStatus();
       return cachedApiKey;
     }
 
@@ -1101,7 +1106,6 @@
         const parser = new DOMParser();
         const doc = parser.parseFromString(htmlString, "text/html");
 
-        // 1. Precise Title Extraction (og:title > twitter:title > title)
         let rawTitle = doc.querySelector('meta[property="og:title"]')?.getAttribute('content')
                     || doc.querySelector('meta[name="twitter:title"]')?.getAttribute('content')
                     || doc.querySelector('meta[name="title"]')?.getAttribute('content')
@@ -1109,16 +1113,13 @@
                     || "";
         
         let cleanTitle = rawTitle.trim();
-        // Remove common media website suffixes
         cleanTitle = cleanTitle.replace(/\s*[-|_|–|—]\s*(聯合新聞網|報時光|聯合報|udn|Yahoo奇摩|ETtoday|商業周刊|天下雜誌|遠見雜誌).*$/i, '').trim();
 
-        // 2. Description
         let rawDesc = doc.querySelector('meta[property="og:description"]')?.getAttribute('content')
                    || doc.querySelector('meta[name="description"]')?.getAttribute('content')
                    || doc.querySelector('meta[name="twitter:description"]')?.getAttribute('content')
                    || "";
 
-        // 3. Main Article Text Extraction
         let bodyText = "";
         const articleEl = doc.querySelector('article') || doc.querySelector('.story-body') || doc.querySelector('.article-content') || doc.querySelector('main');
         if (articleEl) {
@@ -1144,14 +1145,41 @@
       return null;
     }
 
-    // Multi-Proxy Scraper with fallbacks
+    // Multi-Proxy Scraper with fallbacks (Fast Jina Reader first)
     async function fetchWebpageContent(url) {
       if (!url || !url.startsWith("http")) return null;
 
-      // 1. Try allorigins JSON proxy (Fastest & most reliable for Taiwanese news sites)
+      // 1. Try Jina Reader directly (Fastest, cleanest Markdown, native CORS support)
       try {
         const controller = new AbortController();
-        const tid = setTimeout(() => controller.abort(), 7000);
+        const tid = setTimeout(() => controller.abort(), 5000);
+        const res = await fetch(`https://r.jina.ai/${url}`, {
+          signal: controller.signal,
+          headers: { 'Accept': 'text/plain' }
+        });
+        clearTimeout(tid);
+        if (res.ok) {
+          const text = await res.text();
+          if (text && text.length > 80 && !text.includes("Log in to see photos and videos")) {
+            const titleMatch = text.match(/(?:Title:\s*|#\s*)([^\n]+)/i);
+            let extractedTitle = titleMatch ? titleMatch[1].trim() : "";
+            extractedTitle = extractedTitle.replace(/\s*[-|_|–|—]\s*(聯合新聞網|報時光|聯合報|udn).*$/i, '').trim();
+
+            return {
+              title: extractedTitle,
+              description: "",
+              content: text.slice(0, 3500)
+            };
+          }
+        }
+      } catch (e) {
+        console.warn("Jina reader fast attempt failed, trying fallback:", e);
+      }
+
+      // 2. Try allorigins JSON proxy
+      try {
+        const controller = new AbortController();
+        const tid = setTimeout(() => controller.abort(), 5000);
         const res = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`, {
           signal: controller.signal
         });
@@ -1166,42 +1194,13 @@
           }
         }
       } catch (e) {
-        console.warn("allorigins failed, trying fallback:", e);
-      }
-
-      // 2. Try Jina Reader
-      try {
-        const controller = new AbortController();
-        const tid = setTimeout(() => controller.abort(), 8500);
-        const res = await fetch(`https://r.jina.ai/${url}`, {
-          signal: controller.signal,
-          headers: { 'Accept': 'text/plain' }
-        });
-        clearTimeout(tid);
-        if (res.ok) {
-          const text = await res.text();
-          if (text && text.length > 80 && !text.includes("Log in to see photos and videos")) {
-            const lines = text.split('\n').filter(l => l.trim().length > 0);
-            let title = "";
-            const titleLine = lines.find(l => l.startsWith('# '));
-            if (titleLine) {
-              title = titleLine.replace('# ', '').trim();
-            }
-            return {
-              title: title,
-              description: "",
-              content: text.slice(0, 3500)
-            };
-          }
-        }
-      } catch (e) {
-        console.warn("Jina reader fallback failed:", e);
+        console.warn("allorigins fallback failed:", e);
       }
 
       // 3. Try codetabs proxy
       try {
         const controller = new AbortController();
-        const tid = setTimeout(() => controller.abort(), 6500);
+        const tid = setTimeout(() => controller.abort(), 4500);
         const res = await fetch(`https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`, {
           signal: controller.signal
         });
@@ -1216,7 +1215,7 @@
           }
         }
       } catch (e) {
-        console.warn("codetabs proxy fallback failed:", e);
+        console.warn("codetabs fallback failed:", e);
       }
 
       return null;
@@ -1386,7 +1385,7 @@ ${articleId ? `網址文章識別編號：${articleId}\n` : ''}
 【重要規範（嚴格遵守）】：
 1. 標題 (title)：
    - 若已有【真實抓取標題】，請依據真實標題精煉為吸引人的繁體中文標題。
-   - 絕對禁止胡亂猜測或把同網站上的其他無關新聞（例如教育、教師問題、政治等）冒充為本篇內容！必須嚴格針對此篇真實主題進行萃取。
+   - 絕對禁止胡亂猜測或把同網站上的其他無關新聞冒充為本篇內容！必須嚴格針對此篇真實主題進行萃取。
 2. type: "${forcedType !== 'auto' ? forcedType : detectedType}"
 3. category: 核心分類名稱（例如："商業思維與行銷"、"工作心智與效率"、"運動與生活風格"、"個人成長與習慣"、"科技與未來"、"心理與人生哲學" 等）。若符合現有分類請優先復用。
 4. summary: 2~3 句清晰流暢的核心重點摘要。
@@ -1394,7 +1393,7 @@ ${articleId ? `網址文章識別編號：${articleId}\n` : ''}
 6. impact: 1 句精闢指引，點出這篇內容對個人的「工作行動」或「人生思維」能帶來何種啟發。
 7. tags: 3~4 個關鍵標籤陣列（如："#中職"、"#品牌行銷"、"#商業策略"）。
 
-格式要求（嚴格遵守純 JSON）：
+請直接以純 JSON 格式回傳，格式如下：
 {
   "title": "string",
   "type": "${forcedType !== 'auto' ? forcedType : detectedType}",
@@ -1410,11 +1409,11 @@ ${articleId ? `網址文章識別編號：${articleId}\n` : ''}
         const useSearchGrounding = isUrl && !fetchedContent && !fetchedTitle;
         const payload = {
           contents: [{ parts: [{ text: prompt }] }],
-          ...(useSearchGrounding ? { tools: [{ "googleSearch": {} }] } : {}),
+          ...(useSearchGrounding ? { tools: [{ "google_search": {} }] } : {}),
           ...((!useSearchGrounding) ? { generationConfig: { responseMimeType: "application/json" } } : {})
         };
 
-        const models = ["gemini-2.5-flash", "gemini-1.5-flash"];
+        const models = ["gemini-3-flash-preview", "gemini-2.5-flash", "gemini-1.5-flash"];
         let response = null;
         let responseErrorMsg = "";
 
@@ -1449,7 +1448,8 @@ ${articleId ? `網址文章識別編號：${articleId}\n` : ''}
         try {
           parsed = JSON.parse(responseText);
         } catch (e) {
-          const jsonMatch = responseText.match(/\{[\s\S]*\}/);
+          const cleanText = responseText.replace(/```(?:json)?/gi, '').replace(/```/g, '').trim();
+          const jsonMatch = cleanText.match(/\{[\s\S]*\}/);
           if (jsonMatch) parsed = JSON.parse(jsonMatch[0]);
           else throw new Error("無法解析 JSON 格式");
         }
@@ -1502,7 +1502,7 @@ ${articleId ? `網址文章識別編號：${articleId}\n` : ''}
             type: forcedType !== "auto" ? forcedType : detectedType,
             category: forcedCat || "隨手筆記",
             summary: inputNotes || inputUrl,
-            takeaways: ["此內容已由離線備援加入資料庫。稍後可點擊重新解析。"],
+            takeaways: [`此內容已由離線備援加入資料庫。(${err.message || '待重新解析'})`],
             impact: "持續回顧並融入日常實踐。",
             tags: ["快速收納"],
             thumbnail: mediaThumbnail || "",
@@ -1563,7 +1563,7 @@ ${knowledgeDigest}
           generationConfig: { responseMimeType: "application/json" }
         };
 
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
         const response = await fetchWithRetry(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1576,7 +1576,10 @@ ${knowledgeDigest}
         const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
         
         if (text) {
-          const res = JSON.parse(text);
+          const cleanText = text.replace(/```(?:json)?/gi, '').replace(/```/g, '').trim();
+          const jsonMatch = cleanText.match(/\{[\s\S]*\}/);
+          const res = jsonMatch ? JSON.parse(jsonMatch[0]) : JSON.parse(cleanText);
+
           if (res.levelTitle) document.getElementById("advisor-level").innerText = res.levelTitle;
           if (res.brief) document.getElementById("advisor-brief").innerText = res.brief;
 
@@ -1626,7 +1629,7 @@ ${knowledgeDigest}
 
       try {
         const payload = { contents: [{ parts: [{ text: prompt }] }] };
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
         const response = await fetchWithRetry(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -1931,7 +1934,7 @@ ${knowledgeDigest}
       testStatusEl.classList.remove("hidden");
 
       try {
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${keyToTest}`;
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${keyToTest}`;
         const res = await fetch(endpoint, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
